@@ -1,0 +1,31 @@
+<!-- HEADER -->
+<?php require_once 'html_header.html'; ?>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Page content-->
+    <div class="container">
+        <div class="text-center mt-5">
+            
+            <h3>Willkommen <!--user mit $_SESSION['name']--></h3>
+            <nav class="nav">
+                <a class="nav-link active" href="#">Active</a>
+                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </nav>
+        </div>
+    </div>
+
+    <?php #var_dump(seeOfferedPlayers($_SESSION['user'])); ?>
+
+    <!-- FOOTER -->
+    <?php require_once "html_footer.html" ?>
+
+    <!-- Bootstrap JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awsome -->
+    <script src="https://kit.fontawesome.com/f072a47e74.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
