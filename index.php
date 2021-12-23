@@ -5,8 +5,6 @@
 
     $aktion = isset($_REQUEST['aktion'])?$_REQUEST['aktion']:'default';
     
-    ##DEBUG:
-    echo "Aktion: ".$aktion;
     // LOGIK
     switch($aktion) {
         case 'default':
@@ -25,5 +23,7 @@
     }
     
     // SICHT
-    require_once 'view/' . $aktion . '.tpl.html'; 
+    require_once 'view/html_template/html_header.html';
+    require_once 'view/' . $aktion . '.tpl.html';
+    require_once 'view/html_template/html_footer.html';
 ?>
