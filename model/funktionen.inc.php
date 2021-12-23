@@ -254,3 +254,9 @@ function loginResult(){
             }
     }
 }
+
+function logout()
+{
+    unset($_SESSION['user']);
+    header("Location:index.php");
+}
