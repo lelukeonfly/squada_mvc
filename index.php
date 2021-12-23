@@ -1,13 +1,27 @@
 <?php
+    session_start();
     require_once 'model/funktionen.inc.php';
     
 
     $aktion = isset($_REQUEST['aktion'])?$_REQUEST['aktion']:'default';
     
+    ##DEBUG:
     echo "Aktion: ".$aktion;
     // LOGIK
     switch($aktion) {
         case 'default':
+            navbar();
+            break;
+        case 'login':
+            navbar();
+            loginResult();
+            break;
+        case 'dashboard':
+            echo 'dashboard site';
+            break;
+        case 'logout':
+            break;
+        case 'settings':
             break;
     }
     

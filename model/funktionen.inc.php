@@ -223,4 +223,29 @@ function setGuthaben($id){
 function bieten(){
 
 }
-?>
+
+function navbar(){
+    //Responsive navbar
+    if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+        #require_once "imports/menubar.php";
+        require_once 'view/html_menubar.html';
+    } 
+    else {
+        #require_once "imports/navbar.php";
+        require_once 'view/html_navbar.html';
+    }
+}
+
+function loginResult(){
+    if(isset($_POST['loginname']) && isset($_POST['pwd'])){
+
+            $result = log_in($_POST['loginname'], $_POST['pwd']);
+            if ($result == true) {
+                #leite zu index mit aktion dashbloard weiter (mvc)
+                header('Location: index.php?aktion=dashboard');
+            }
+            else {
+                $result == false;
+            }
+    }
+}
