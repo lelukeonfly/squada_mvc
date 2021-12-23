@@ -26,5 +26,5 @@
     }
     
     // SICHT
-    require_once 'view/' . $aktion . '.tpl.html';  
+    require_once 'view/' . $aktion . '.tpl.html'; 
 ?>
