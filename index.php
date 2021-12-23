@@ -10,21 +10,18 @@
     // LOGIK
     switch($aktion) {
         case 'default':
-            #navbar();
             break;
         case 'login':
-            #navbar();
             loginResult();
             break;
         case 'dashboard':
-            #navbar();
             echo 'dashboard site';
             break;
         case 'logout':
-            #navbar();
+            logout();
+            $aktion = 'default';
             break;
         case 'settings':
-            #navbar();
             break;
     }
     
