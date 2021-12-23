@@ -3,11 +3,11 @@
     require_once 'model/funktionen.inc.php';
     
 
-    $aktion = isset($_REQUEST['aktion'])?$_REQUEST['aktion']:'default';
+    $aktion = isset($_REQUEST['aktion'])?$_REQUEST['aktion']:'home';
     
     // LOGIK
     switch($aktion) {
-        case 'default':
+        case 'home':
             break;
         case 'login':
             loginResult();
@@ -16,7 +16,7 @@
             break;
         case 'logout':
             logout();
-            $aktion = 'default';
+            $aktion = 'home';
             break;
         case 'settings':
             break;
