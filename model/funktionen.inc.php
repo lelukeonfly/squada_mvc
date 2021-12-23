@@ -54,7 +54,6 @@ function log_in($username, $pwd) {
     
     //Aufbau der DB Connection
     $db = get_db_connection();
-    $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
 
     //Absetzen der DB Query
     $query = "SELECT m.Loginname, m.Passwort, m.id, m.name FROM mannschaft m WHERE m.Loginname = '$username'";
@@ -204,6 +203,34 @@ function seeOfferedPlayers($id){
     return $offers;
 }
 
+function comparePassword($password1, $password2) {
+    if ($password1 == $password2) 
+        return true;
+    else
+        return false;
+    
+}
+
+function editPassword($currentpassword, $newpassword, $id) {
+
+    $db_connection = get_db_connection();
+
+    $verifyPasswordQuery = "SELECT m.Passwort, m.ID FROM mannschaft m WHERE m.id = $id";
+
+    $statement = $db->query($verifyPasswordQuery, PDO::FETCH_ASSOC);
+    $eintrag = $statement->fetch();
+    $hashed_password = $eintrag['Password'];
+
+    $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
+
+    if (password_verify($currentpassword, $hashed_password)) {
+        $editPassword = "UPDATE mannschaft SET Passwort = '$newpassword' WHERE mannschaft.ID = $id";
+        $statement = $db_connection->query($editPassword, PDO::FETCH_ASSOC);
+        return $statement->execute();
+    } else 
+        return false;
+}
+
 function changeUsersettings($id, $newname, $newloginname, $newpassword) {
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
     $query = "UPDATE mannschaft SET Name = '$newname', Loginname = '$newloginname', Passwort = '$newpassword' WHERE mannschaft.ID = $id";
@@ -212,8 +239,6 @@ function changeUsersettings($id, $newname, $newloginname, $newpassword) {
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
 
     return $statement->execute();
-
-    
 }
 
 function setGuthaben($id){
