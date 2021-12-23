@@ -1,0 +1,41 @@
+<body class="d-flex flex-column min-vh-100">
+    <!-- Page content-->
+    <div class="container">
+        <div class="text-center mt-5">
+            <h1 class="display-4">Settings</h1>
+            <?php if(!$_POST) { ?>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="name"
+                        name="name" placeholder="Enter Name" value="<?=$user['Name']?>"  required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Loginname</label>
+                    <input type="text" class="form-control" id="loginname" name="loginname"
+                        placeholder="Loginname" value="<?=$user['Loginname']?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="Passwort">Passwort</label>
+                    <input type="password" class="form-control" id="Passwort" name="passwort"
+                        placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <?php } elseif($_POST) { ?>
+            <?php if($update == true) { ?>
+                        <div class="alert alert-success" role="alert">
+                        <p><i class="fas fa-check-circle fa-7x"></i></p>
+                        <p>Settings applied</p>
+                    </div>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+            <?php } else { ?>
+                <div class="alert alert-danger" role="alert">
+                        <p><i class="fas fa-times-circle fa-7x"></i></p>
+                        <p>Update Failed!</p>
+                    </div>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+            <?php }} ?>
+
+        </div>
+    </div>
