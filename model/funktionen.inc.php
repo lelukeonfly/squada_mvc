@@ -228,17 +228,17 @@ function navbar(){
     //Responsive navbar
     if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
         #require_once "imports/menubar.php";
-        require_once 'html_template/html_menubar.html';
+        require_once 'view/html_template/html_menubar.html';
     } 
     else {
         #require_once "imports/navbar.php";
-        require_once 'html_template/html_navbar.html';
+        require_once 'view/html_template/html_navbar.html';
     }
 }
 
 function footer()
 {
-    require_once 'html_template/html_footer.html';
+    require_once 'view/html_template/html_footer.html';
 }
 
 function loginResult(){

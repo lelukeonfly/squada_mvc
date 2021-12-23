@@ -15,7 +15,6 @@
             loginResult();
             break;
         case 'dashboard':
-            echo 'dashboard site';
             break;
         case 'logout':
             logout();
