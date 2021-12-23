@@ -1,6 +1,3 @@
-<body>
-    <!-- NAVBAR -->
-    <?php navbar();?>
     <div class="login-form">
         <form action="index.php?aktion=dashboard" method="post">
             <h2 class="text-center">LOG IN</h2>
@@ -14,13 +11,8 @@
                 <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </div>
             <?php 
-                if (isset($result) && $result == false) { ?>
+                if (success()) { ?>
             <p>Login faild!</p>
             <?php }?>
         </form>
     </div>
-
-    <!-- FOOTER -->
-    <?php footer();?>
-
-</body>

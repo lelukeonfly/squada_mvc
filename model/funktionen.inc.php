@@ -236,6 +236,11 @@ function navbar(){
     }
 }
 
+function head()
+{
+    require_once 'view/html_template/html_header.html';
+}
+
 function footer()
 {
     require_once 'view/html_template/html_footer.html';
@@ -259,4 +264,9 @@ function logout()
 {
     unset($_SESSION['user']);
     header("Location:index.php");
+}
+
+function success()
+{
+    return isset($result) && $result == false;
 }
