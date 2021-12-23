@@ -236,6 +236,11 @@ function navbar(){
     }
 }
 
+function footer()
+{
+    require_once 'html_template/html_footer.html';
+}
+
 function loginResult(){
     if(isset($_POST['loginname']) && isset($_POST['pwd'])){
 
