@@ -3,7 +3,7 @@ function get_db_connection()
     {
         $host = "localhost";
         $user = "root";
-        $pwd = "root";
+        $pwd = "";
         $schema = "squada";
 
         try {
@@ -273,7 +273,6 @@ function footer()
 
 function loginResult(){
     if(isset($_POST['loginname']) && isset($_POST['pwd'])){
-
             $result = log_in($_POST['loginname'], $_POST['pwd']);
             if ($result == true) {
                 #leite zu index mit aktion dashbloard weiter (mvc)
