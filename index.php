@@ -3,7 +3,7 @@
     require_once 'model/funktionen.inc.php';
     
 
-    $aktion = isset($_REQUEST['aktion'])?$_REQUEST['aktion']:'home';
+    $aktion = isset($_GET['aktion'])?$_GET['aktion']:'home';
     
     // LOGIK
     switch($aktion) {
