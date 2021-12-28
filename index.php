@@ -20,6 +20,8 @@
             break;
         case 'settings':
             break;
+        case 'spieler':
+            break;
     }
     
     // SICHT
