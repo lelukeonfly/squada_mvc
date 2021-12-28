@@ -19,7 +19,7 @@
             <?php
         }
     ?>
-<tr class="table-row" data-href="playerstats.php?playerid=<?=$player["id"];?>">
+<tr class="table-row" data-href="index.php?aktion=detail&playerid=<?=$player["id"];?>">
         <?php
             foreach($player as $column_header => $playerdata){
                 if(strcmp($column_header,"id")==0){}else{

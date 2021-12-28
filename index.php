@@ -22,6 +22,8 @@
             break;
         case 'spieler':
             break;
+        case 'detail':
+            break;
     }
     
     // SICHT
