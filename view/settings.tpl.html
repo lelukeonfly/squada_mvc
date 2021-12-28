@@ -1,3 +1,4 @@
+    <?php $user = getUsername($_SESSION['user']); ?>
     <!-- Page content-->
     <div class="container">
         <div class="text-center mt-5">
@@ -22,7 +23,7 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <?php } elseif($_POST) { ?>
-            <?php if($update == true) { ?>
+            <?php if($update != true) { ?>
                         <div class="alert alert-success" role="alert">
                         <p><i class="fas fa-check-circle fa-7x"></i></p>
                         <p>Settings applied</p>

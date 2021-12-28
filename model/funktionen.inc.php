@@ -191,8 +191,6 @@ function getTeuerstenPlayer() {
 }
 
 function seeOfferedPlayers($id){
-
-
     $db_connection = get_db_connection();
 
     $query = "SELECT ba.Preis, s.Name, s.Position, s.Mannschaft FROM bietet_auf ba JOIN spieler s ON s.ID = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
@@ -232,13 +230,25 @@ function editPassword($currentpassword, $newpassword, $id) {
 }
 
 function changeUsersettings($id, $newname, $newloginname, $newpassword) {
+    $state = true;
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
     $query = "UPDATE mannschaft SET Name = '$newname', Loginname = '$newloginname', Passwort = '$newpassword' WHERE mannschaft.ID = $id";
     $db_connection = get_db_connection();
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
 
-    return $statement->execute();
+    if ($statement->execute()) {
+        $state = false;
+    }
+
+    return $state;
+}
+
+function ResultchangeUsersettings(){
+    if ($_POST) {
+        $update =changeUsersettings($_SESSION['user'], $_POST['name'], $_POST['loginname'], $_POST['passwort']);
+        return $update;
+    }
 }
 
 function setGuthaben($id){
@@ -272,16 +282,15 @@ function footer()
 }
 
 function loginResult(){
+    $result = true;
     if(isset($_POST['loginname']) && isset($_POST['pwd'])){
             $result = log_in($_POST['loginname'], $_POST['pwd']);
             if ($result == true) {
                 #leite zu index mit aktion dashbloard weiter (mvc)
                 header('Location: index.php?aktion=dashboard');
             }
-            else {
-                $result == false;
-            }
-    }
+        }
+    return $result;
 }
 
 function logout()
@@ -292,5 +301,5 @@ function logout()
 
 function success()
 {
-    return isset($result) && $result == false;
+    return isset($login) && $login == false; // <-- Does not work
 }

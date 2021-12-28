@@ -10,7 +10,6 @@
         case 'home':
             break;
         case 'login':
-            loginResult();
             break;
         case 'dashboard':
             break;
@@ -19,6 +18,7 @@
             $aktion = 'home';
             break;
         case 'settings':
+            $update = ResultchangeUsersettings();
             break;
         case 'spieler':
             break;
