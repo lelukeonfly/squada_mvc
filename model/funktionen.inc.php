@@ -50,21 +50,23 @@ function get_player($id)
 #}
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
-function log_in($username, $pwd, $admin = false) {
+function log_in($username, $pwd, $admin) {
     
     //Aufbau der DB Connection
     $db = get_db_connection();
 
     //Absetzen der DB Query
-    if ($admin == false) 
+    if ($admin == false) {
         $query = "SELECT m.Loginname, m.Passwort, m.id, m.name FROM mannschaft m WHERE m.Loginname = '$username'";
-    else 
-        $query = "SELECT a.ID, a.Name, a.Passwort FROM admin a WHERE a.Name = '$username'";
+    }
+    else {
+        $query = "SELECT a.id, a.name, a.Passwort FROM admin a WHERE a.Name = '$username'";
+    }
     $statement = $db->query($query, PDO::FETCH_ASSOC);
 
     $num = $statement->rowCount(); 
     $eintrag = $statement->fetch();
-     
+    var_dump($eintrag);
     $hash = $eintrag['Passwort'];
     
 
@@ -171,13 +173,21 @@ function register($loginname, $pwd, $name, $guthaben) {
 
 }
 
-function getUsername($id){
+function getUsername($id, $admin){
     $db_connection = get_db_connection();
 
-    $query = "SELECT m.* FROM mannschaft m WHERE m.ID = $id";
+    if ($admin == false) {
+        $query = "SELECT m.* FROM mannschaft m WHERE m.ID = $id";
+    } else {
+        $query = "SELECT a.* FROM admin a WHERE a.ID = $id";
+    }
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
     $eintrag = $statement->fetch();
+
+    if ($admin == true) {
+        $eintrag['Loginname'] = $eintrag['Name'];
+    }
 
     return $eintrag;
 }
@@ -219,7 +229,7 @@ function editPassword($currentpassword, $newpassword, $id) {
 
     $verifyPasswordQuery = "SELECT m.Passwort, m.ID FROM mannschaft m WHERE m.id = $id";
 
-    $statement = $db->query($verifyPasswordQuery, PDO::FETCH_ASSOC);
+    $statement = $db_connection->query($verifyPasswordQuery, PDO::FETCH_ASSOC);
     $eintrag = $statement->fetch();
     $hashed_password = $eintrag['Password'];
 
@@ -285,7 +295,7 @@ function footer()
     require_once 'view/html_template/html_footer.html';
 }
 
-function loginResult($admin = false){
+function loginResult($admin){
     $result = true;
     if(isset($_POST['loginname']) && isset($_POST['pwd'])){
 
@@ -300,10 +310,13 @@ function loginResult($admin = false){
 
 function logout()
 {
-    unset($_SESSION['user']);
+    session_destroy();
     header("Location:index.php");
 }
 
+function getLogoURL(){
+    return $_SERVER['DOCUMENT_ROOT']."/view/img/LOGO.png";
+}
 
 function success()
 {

@@ -10,7 +10,7 @@
         case 'home':
             break;
         case 'login':
-            $login = loginResult();
+            $login = loginResult($admin = false);
             break;
         case 'admin':
             $login = loginResult($admin = true);
