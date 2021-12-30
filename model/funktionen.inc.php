@@ -50,13 +50,16 @@ function get_player($id)
 #}
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
-function log_in($username, $pwd) {
+function log_in($username, $pwd, $admin = false) {
     
     //Aufbau der DB Connection
     $db = get_db_connection();
 
     //Absetzen der DB Query
-    $query = "SELECT m.Loginname, m.Passwort, m.id, m.name FROM mannschaft m WHERE m.Loginname = '$username'";
+    if ($admin == false) 
+        $query = "SELECT m.Loginname, m.Passwort, m.id, m.name FROM mannschaft m WHERE m.Loginname = '$username'";
+    else 
+        $query = "SELECT a.ID, a.Name, a.Passwort FROM admin a WHERE a.Name = '$username'";
     $statement = $db->query($query, PDO::FETCH_ASSOC);
 
     $num = $statement->rowCount(); 
@@ -72,6 +75,7 @@ function log_in($username, $pwd) {
             if (password_verify($pwd, $hash)) {
                 $_SESSION['user'] = $eintrag['id'];
                 $_SESSION['name'] = $eintrag['name'];
+                $_SESSION['admin'] = $admin;
                 return true;
             } else {
                 return false;
@@ -281,14 +285,15 @@ function footer()
     require_once 'view/html_template/html_footer.html';
 }
 
-function loginResult(){
+function loginResult($admin = false){
     $result = true;
     if(isset($_POST['loginname']) && isset($_POST['pwd'])){
-            $result = log_in($_POST['loginname'], $_POST['pwd']);
-            if ($result == true) {
-                #leite zu index mit aktion dashbloard weiter (mvc)
-                header('Location: index.php?aktion=dashboard');
-            }
+
+        $result = log_in($_POST['loginname'], $_POST['pwd'], $admin);
+        if ($result == true) {
+            #leite zu index mit aktion dashbloard weiter (mvc)
+            header('Location: index.php?aktion=dashboard');
+        }
         }
     return $result;
 }
@@ -298,6 +303,7 @@ function logout()
     unset($_SESSION['user']);
     header("Location:index.php");
 }
+
 
 function success()
 {

@@ -10,6 +10,10 @@
         case 'home':
             break;
         case 'login':
+            $login = loginResult();
+            break;
+        case 'admin':
+            $login = loginResult($admin = true);
             break;
         case 'dashboard':
             break;
