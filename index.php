@@ -3,8 +3,15 @@
     require_once 'model/funktionen.inc.php';
     
 
+    /**
+     * if GET variable not set -> aktion variable set to 'home'
+     * if GET variable set -> aktion variable set to GET value
+     */
     $aktion = isset($_GET['aktion'])?$_GET['aktion']:'home';
     
+    /**
+     * if aktion variable is specific value -> do that inside the switch case
+     */
     // LOGIK
     switch($aktion) {
         case 'home':
@@ -30,6 +37,11 @@
             break;
     }
     
+    /**
+     * loads the header then the actual site and then the footer
+     * 
+     * loads the specific side where aktion variable matches the filename
+     */
     // SICHT
     require_once 'view/html_template/html_header.html';
     require_once 'view/' . $aktion . '.tpl.html';
