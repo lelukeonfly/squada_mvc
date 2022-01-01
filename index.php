@@ -31,6 +31,7 @@
             $aktion = 'home';
             break;
         case 'settings':
+            //get Results from Form and Update
             $update = ResultchangeUsersettings();
             break;
         case 'spieler':
