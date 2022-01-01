@@ -17,9 +17,11 @@
         case 'home':
             break;
         case 'login':
+            //get Login result from Form *no* admin login
             $login = loginResult($admin = false);
             break;
         case 'admin':
+            //get Login result from Form *with* admin login
             $login = loginResult($admin = true);
             break;
         case 'dashboard':
