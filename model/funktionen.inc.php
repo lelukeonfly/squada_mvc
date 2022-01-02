@@ -273,6 +273,9 @@ function bieten(){
 
 }
 
+/**
+ * used to load the menubar after the head() fun
+ */
 function navbar(){
     //Responsive navbar
     if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
@@ -285,11 +288,17 @@ function navbar(){
     }
 }
 
+/**
+ * used to add the header to the document
+ */
 function head()
 {
     require_once 'view/html_template/html_header.html';
 }
 
+/**
+ * used to add the footer to the document
+ */
 function footer()
 {
     require_once 'view/html_template/html_footer.html';
@@ -310,6 +319,7 @@ function loginResult($admin){
 
 function logout()
 {
+    #destroys session (deletes it) and forwards to main page
     session_destroy();
     header("Location:index.php");
 }
