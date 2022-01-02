@@ -4,7 +4,7 @@
         foreach(get_players() as $player){
         if($x){
             ?>
-            <thead>
+            <thead class="text-center">
                 <?php
                     foreach($player as $column_header => $data){
                         if(strcmp($column_header,"id")==0){}else{

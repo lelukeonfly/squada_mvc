@@ -38,6 +38,8 @@
             break;
         case 'detail':
             break;
+        case 'register':
+            break;
     }
     
     /**

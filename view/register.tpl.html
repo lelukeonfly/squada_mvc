@@ -1,0 +1,48 @@
+    <div class="container">
+        <div class="text-center mt-5">
+            <?php if (!$_POST) { ?>
+            <form action="register.php" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        name="name" placeholder="Enter Name" required>
+                    <small id="emailHelp" class="form-text text-muted">Please make sure that the correct name is
+                        entered.</small>
+                </div>
+                <div class="form-group">
+                    <label for="Loginname">Loginname</label>
+                    <input type="text" class="form-control" id="Loginname" name="loginname"
+                        placeholder="Loginname">
+                </div>
+                <div class="form-group">
+                    <label for="Passwort">Passwort</label>
+                    <input type="password" class="form-control" id="Passwort" name="passwort"
+                        placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="Guthaben">Set Guthaben</label>
+                    <input type="text" class="form-control" id="Guthaben" name="guthaben"
+                        placeholder="Guthaben">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <?php }  elseif ($_POST) { ?>
+                <?php if ($res == true) { ?>
+                    
+                    <div class="alert alert-success" role="alert">
+                        <p><i class="fas fa-check-circle fa-7x"></i></p>
+                        <p>User Created</p>
+                    </div>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+                <?php } else { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <p><i class="fas fa-times-circle fa-7x"></i></p>
+                        <p>Creation Failed!</p>
+                        <p>Error: <?= $res ?></p>
+                    </div>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+
+            <?php }} ?>
+        </div>
+    </div>
