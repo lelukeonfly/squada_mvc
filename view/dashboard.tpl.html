@@ -1,3 +1,43 @@
 <?php require_once 'model/logedin.php'; ?>
+<?php $players = seeOfferedPlayers($_SESSION['user']); ?>
 
-<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit ad officia non maxime, reprehenderit labore distinctio enim? Officia rem cum, sunt facere quod assumenda? Quis exercitationem adipisci accusantium tempora sed.</p>
+
+<div class="container">
+    <div class="text-center mt-5">
+        <h1><?= getTimeState() ?> <?= $user['Name'] ?>!</h1><br />
+        <?php if ($_SESSION['admin'] == false) { ?>
+        
+        <div class="container">
+            <h1 class="display-6">Your stats</h1>
+            <p>
+                <b>name:</b> <?= $user['Name'] ?> <br />
+                <b>loginname:</b> <?= $user['Loginname'] ?> <br />
+                <b>balance:</b> <?= $user['Guthaben'] ?> $SQD<br />
+            </p>
+            <hr />
+            <h1 class="display-6">Your offered players</h1>
+            <div class="row justify-content-center">
+                <?php foreach ($players as $value) { ?>
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="<?= getPlayerImage($value['Name']) ?>" alt="Playerimage of <?= $value['Name'] ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $value['Name'] ?></h5>
+                            <p class="card-text">
+                                Price: <?= $value['Preis'] ?><br />
+                                Position: <?= $value['Position'] ?><br />
+                                House Team: <?= $value['Mannschaft'] ?> <br />
+                            </p>
+                            <a href="index.php?aktion=detail&playerid=<?=$value['ID']?>" class="btn btn-primary">View auction</a>
+                        </div>
+                    </div>
+                <?php } ?>
+
+            </div>
+        </div>
+        <?php } else { ?>
+            <a href="index.php?aktion=register"><button type="button" class="btn btn-primary btn-lg btn-block">Register new Team</button></a>
+            <a href="#"><button type="button" class="btn btn-primary btn-lg btn-block">Delete Team</button></a>
+            <a href="#"><button type="button" class="btn btn-primary btn-lg btn-block">Dissolve auction</button></a>
+        <?php } ?>
+    </div>
+</div>

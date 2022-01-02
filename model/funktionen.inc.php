@@ -204,10 +204,20 @@ function getTeuerstenPlayer() {
     return $spieler;
 }
 
+function getTimeState() {
+
+    $timeOfDay = date('a');
+    if($timeOfDay == 'am'){
+        return 'Good morning';
+    }else{
+        return 'Good afternoon';
+    }
+}
+
 function seeOfferedPlayers($id){
     $db_connection = get_db_connection();
 
-    $query = "SELECT ba.Preis, s.Name, s.Position, s.Mannschaft FROM bietet_auf ba JOIN spieler s ON s.ID = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
+    $query = "SELECT ba.Preis, s.Name, s.Position, s.Mannschaft, s.ID FROM bietet_auf ba JOIN spieler s ON s.ID = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $offers = $statement->fetchAll();

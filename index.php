@@ -25,6 +25,7 @@
             $login = loginResult($admin = true);
             break;
         case 'dashboard':
+            $user = getUsername($_SESSION['user'], $_SESSION['admin']);
             break;
         case 'logout':
             logout();
