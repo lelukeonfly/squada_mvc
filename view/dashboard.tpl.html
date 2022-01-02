@@ -6,7 +6,7 @@
     <div class="text-center mt-5">
         <h1><?= getTimeState() ?> <?= $user['Name'] ?>!</h1><br />
         <?php if ($_SESSION['admin'] == false) { ?>
-        
+        <img src="<?=getTeamImage(getUsername($_SESSION['user'], $_SESSION['admin'])['Name'])?>" alt="..." class="img-thumbnail">
         <div class="container">
             <h1 class="display-6">Your stats</h1>
             <p>

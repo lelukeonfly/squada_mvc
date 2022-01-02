@@ -124,13 +124,15 @@ function getTeamImage($team) {
     //Die eingegebenen Werte in Lowercase umwandeln
     $team = strtolower($team);
     $url = "https://content.fantacalcio.it/web/img/team/$team.png";
+    $image_type_check = @exif_imagetype($url);//Get image type + check if exists
+    $noimage = "view/img/team-placeholder.png";
 
     //Überprüfen, ob bild existiert
-    if (!file_exists($url)) {
-        return $url;
+    if (strpos($http_response_header[0], "403") || strpos($http_response_header[0], "404") || strpos($http_response_header[0], "302") || strpos($http_response_header[0], "301") ) {
+        return $noimage;
     }
     else {
-        return false;
+        return $url;
     }
 
 }
