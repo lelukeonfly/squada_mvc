@@ -39,6 +39,7 @@
         case 'detail':
             break;
         case 'register':
+            $res = ResultchangeCreateMannschaft();
             break;
     }
     

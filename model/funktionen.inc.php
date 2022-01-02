@@ -265,6 +265,13 @@ function ResultchangeUsersettings(){
     }
 }
 
+function ResultchangeCreateMannschaft() {
+    if ($_POST) {
+        $res = register($_POST['loginname'], $_POST['passwort'], $_POST['name'], $_POST['guthaben']);
+        return $res;
+    }
+}
+
 function setGuthaben($id){
 
 }
