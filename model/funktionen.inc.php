@@ -1,5 +1,4 @@
 <?php
-#test123
 function get_db_connection()
     {
         $host = "localhost";
@@ -42,13 +41,6 @@ function get_player($id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
-
-#function get_column_names($tablename)
-#{
-#    $db_connection = get_db_connection();
-#    $query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='squada' AND `TABLE_NAME`='$tablename';";
-#    return $db_connection->query($query);
-#}
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
 function log_in($username, $pwd, $admin) {
