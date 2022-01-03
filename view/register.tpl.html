@@ -1,9 +1,7 @@
-<?php require_once 'model/admin_logedin.php'; ?>
-    
     <div class="container">
         <div class="text-center mt-5">
             <?php if (!$_POST) { ?>
-            <form action="index.php?aktion=register" method="post">
+            <form action="register.php" method="post">
                 <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
@@ -36,14 +34,14 @@
                         <p><i class="fas fa-check-circle fa-7x"></i></p>
                         <p>User Created</p>
                     </div>
-                    <a href="index.php?aktion=dashboard"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
                 <?php } else { ?>
                     <div class="alert alert-danger" role="alert">
                         <p><i class="fas fa-times-circle fa-7x"></i></p>
                         <p>Creation Failed!</p>
                         <p>Error: <?= $res ?></p>
                     </div>
-                    <a href="index.php?aktion=dashboard"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+                    <a href="dashboard.php"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
 
             <?php }} ?>
         </div>
