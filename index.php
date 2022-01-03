@@ -25,6 +25,7 @@
             $login = loginResult($admin = true);
             break;
         case 'dashboard':
+            $user = getUsername($_SESSION['user'], $_SESSION['admin']);
             break;
         case 'logout':
             logout();
@@ -39,6 +40,10 @@
         case 'detail':
             break;
         case 'register':
+            $res = ResultchangeCreateMannschaft();
+            break;
+        case 'changepwd':
+            $res = ResultUpdatePwd();
             break;
     }
     
