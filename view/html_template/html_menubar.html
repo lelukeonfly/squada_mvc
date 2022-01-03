@@ -17,10 +17,12 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false"><?=$_SESSION['name'] ?></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item disabled"><i class="fas fa-cog"></i> User Settings</a></li>
+                        <li><a class="dropdown-item disabled"><i class="fas fa-headset"></i> Support</a></li>
+                        <li class="dropdown-item"><i class="fas fa-ticket-alt"></i> Support Code: <?=$_SESSION['user']?></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        <li><a class="dropdown-item disabled"><i class="fas fa-cog"></i> User Settings</a></li>
                         <li><a class="dropdown-item" href="index.php?aktion=settings"><i class="fas fa-user-cog"></i> Settings</a></li>
                         <li><a class="dropdown-item" href="index.php?aktion=logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
                     </ul>

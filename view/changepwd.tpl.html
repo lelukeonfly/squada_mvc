@@ -1,0 +1,36 @@
+<?php require_once 'model/admin_logedin.php'; ?>
+    
+    <div class="container">
+        <div class="text-center mt-5">
+            <?php if (!$_POST) { ?>
+            <form action="index.php?aktion=changepwd" method="post">
+                <div class="form-group">
+                    <label>Suppport Code</label>
+                    <input type="text" class="form-control"
+                        name="id" placeholder="Enter Support Code" required>
+                    
+                    <label>New Password </label>
+                    <input type="text" class="form-control"
+                        name="password" placeholder="Enter new Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <?php }  elseif ($_POST) { ?>
+                <?php if ($res != false) { ?>
+                    
+                    <div class="alert alert-success" role="alert">
+                        <p><i class="fas fa-check-circle fa-7x"></i></p>
+                        <p>Update successfull</p>
+                    </div>
+                    <a href="index.php?aktion=dashboard"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+                <?php } else { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <p><i class="fas fa-times-circle fa-7x"></i></p>
+                        <p>Update failed!</p>
+                        <p>Error: <?= $res ?></p>
+                    </div>
+                    <a href="index.php?aktion=dashboard"><button type="button" class="btn btn-primary btn-lg btn-block">Back to Home</button></a>
+
+            <?php }} ?>
+        </div>
+    </div>

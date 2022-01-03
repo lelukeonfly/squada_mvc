@@ -42,6 +42,9 @@
         case 'register':
             $res = ResultchangeCreateMannschaft();
             break;
+        case 'changepwd':
+            $res = ResultUpdatePwd();
+            break;
     }
     
     /**

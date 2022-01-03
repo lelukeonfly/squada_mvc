@@ -150,18 +150,21 @@ function is_logged_in() {
     return $sol;
 }
 
-
+//Admin Funktion: Registrieren von neuen Mannschaften
 function register($loginname, $pwd, $name, $guthaben) {
     $db_connection = get_db_connection();
 
+    //Zuerst überprüfen, ob dieser Name schon existiert
     $checkquery = "SELECT * FROM mannschaft m WHERE m.Loginname = '$loginname'";
     $check = $db_connection->query($checkquery, PDO::FETCH_ASSOC); 
     $usr = $check->fetch();
 
     $num = $check->rowCount(); 
+    //Wenn loginname schon existiert wird die Funktion abgebrochen und der Admin wird informiert
     if ($num >= 1) {
         return false;
     }
+    //Wenn eintrag noch nicht vorhanden ist wird dieser eintrag erstellt und der Benutzer angelegt, sowie der Admin informiert, dass es erfolgreich war
     else {
         $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
         $query = "INSERT INTO mannschaft(ID, Name, Loginname, Passwort, Guthaben) VALUES (NULL, '$name', '$loginname', '$hashed_password', $guthaben)";
@@ -175,18 +178,22 @@ function register($loginname, $pwd, $name, $guthaben) {
 
 }
 
+//Mithilfe der ID und den Adminstatus die Spalte eines Usernamens bekommen
 function getUsername($id, $admin){
     $db_connection = get_db_connection();
-
+    
+    //Wenn admin = true ist wird in der admintabelle nachgesehen, ansonsten in der manschaft tabelle
     if ($admin == false) {
         $query = "SELECT m.* FROM mannschaft m WHERE m.ID = $id";
     } else {
         $query = "SELECT a.* FROM admin a WHERE a.ID = $id";
     }
 
+    //Statement wird abgesetzt
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
     $eintrag = $statement->fetch();
 
+    //Um bugs zu verhindern, falls admin = true ist der eintrag in der spalte name auch in den Loginnamen des eintrags gespeichert, da die admintabelle über keine spalte "loginname" verfügt. (um bugs zu verhindern)
     if ($admin == true) {
         $eintrag['Loginname'] = $eintrag['Name'];
     }
@@ -194,6 +201,7 @@ function getUsername($id, $admin){
     return $eintrag;
 }
 
+//Den teuersten Spieler zurückzugen, in form eines Arrays
 function getTeuerstenPlayer() {
 
     $db_connection = get_db_connection();
@@ -206,16 +214,20 @@ function getTeuerstenPlayer() {
     return $spieler;
 }
 
+//Auf dem Dashboard wird je nach aktueller Zeit, "Good morning" oder "Good afternoon" angezeigt, dies wird mit der date() funktion in php überprüft
 function getTimeState() {
 
     $timeOfDay = date('a');
+    //Falls Vormittag
     if($timeOfDay == 'am'){
         return 'Good morning';
+    //Falls nachmittag
     }else{
         return 'Good afternoon';
     }
 }
 
+//Gibt alle Spieler zurück, auf welche diese Mannschaft gesetzt hat
 function seeOfferedPlayers($id){
     $db_connection = get_db_connection();
 
@@ -227,6 +239,7 @@ function seeOfferedPlayers($id){
     return $offers;
 }
 
+//Vergleicht zwei Passwörter in ungehashter ansicht
 function comparePassword($password1, $password2) {
     if ($password1 == $password2) 
         return true;
@@ -235,26 +248,19 @@ function comparePassword($password1, $password2) {
     
 }
 
-function editPassword($currentpassword, $newpassword, $id) {
+//Falls nur das Passwort einer Mannschaft geändert werden soll wird das mit dieser Funktion abgeändet
+function editPassword($newpassword, $id) {
 
     $db_connection = get_db_connection();
 
-    $verifyPasswordQuery = "SELECT m.Passwort, m.ID FROM mannschaft m WHERE m.id = $id";
-
-    $statement = $db_connection->query($verifyPasswordQuery, PDO::FETCH_ASSOC);
-    $eintrag = $statement->fetch();
-    $hashed_password = $eintrag['Password'];
-
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
+    $editPassword = "UPDATE mannschaft SET Passwort = '$newpassword' WHERE mannschaft.ID = $id";
+    $statement = $db_connection->query($editPassword, PDO::FETCH_ASSOC);
 
-    if (password_verify($currentpassword, $hashed_password)) {
-        $editPassword = "UPDATE mannschaft SET Passwort = '$newpassword' WHERE mannschaft.ID = $id";
-        $statement = $db_connection->query($editPassword, PDO::FETCH_ASSOC);
-        return $statement->execute();
-    } else 
-        return false;
+    return $statement->execute();
 }
 
+//Falls alle Benutzereigenschaften geändert werden sollen, kann dies hier geändert werden
 function changeUsersettings($id, $newname, $newloginname, $newpassword) {
     $state = true;
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
@@ -280,6 +286,13 @@ function ResultchangeUsersettings(){
 function ResultchangeCreateMannschaft() {
     if ($_POST) {
         $res = register($_POST['loginname'], $_POST['passwort'], $_POST['name'], $_POST['guthaben']);
+        return $res;
+    }
+}
+
+function ResultUpdatePwd() {
+    if ($_POST) {
+        $res = editPassword($_POST['password'], $_POST['id']);
         return $res;
     }
 }
