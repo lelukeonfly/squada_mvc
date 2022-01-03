@@ -4,7 +4,7 @@ function get_db_connection()
         $host = "localhost";
         $user = "root";
         $pwd = "";
-        $schema = "squada";
+        $schema = "auktion_testing";
 
         try {
             $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
@@ -21,7 +21,7 @@ function SETADMIN($username, $password){
     $db_connection = get_db_connection();
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $query = "INSERT INTO mannschaft(ID, Name, Loginname, Passwort, Guthaben) VALUES (NULL, '$username', 'ADMIN', '$hashed_password', -1)";
+    $query = "INSERT INTO mannschaft(id, name, loginname, passwort, guthaben) VALUES (NULL, '$username', 'ADMIN', '$hashed_password', -1)";
     
     $res = $db_connection->query($query, PDO::FETCH_ASSOC);
 
@@ -57,10 +57,10 @@ function log_in($username, $pwd, $admin) {
 
     //Absetzen der DB Query
     if ($admin == false) {
-        $query = "SELECT m.Loginname, m.Passwort, m.id, m.name FROM mannschaft m WHERE m.Loginname = '$username'";
+        $query = "SELECT m.loginname, m.passwort, m.id, m.name FROM mannschaft m WHERE m.loginname = '$username'";
     }
     else {
-        $query = "SELECT a.id, a.name, a.Passwort FROM admin a WHERE a.Name = '$username'";
+        $query = "SELECT a.id, a.name, a.passwort FROM admin a WHERE a.Name = '$username'";
     }
     $statement = $db->query($query, PDO::FETCH_ASSOC);
 
@@ -152,7 +152,7 @@ function is_logged_in() {
 function register($loginname, $pwd, $name, $guthaben) {
     $db_connection = get_db_connection();
 
-    $checkquery = "SELECT * FROM mannschaft m WHERE m.Loginname = '$loginname'";
+    $checkquery = "SELECT * FROM mannschaft m WHERE m.loginname = '$loginname'";
     $check = $db_connection->query($checkquery, PDO::FETCH_ASSOC); 
     $usr = $check->fetch();
 
@@ -162,7 +162,7 @@ function register($loginname, $pwd, $name, $guthaben) {
     }
     else {
         $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
-        $query = "INSERT INTO mannschaft(ID, Name, Loginname, Passwort, Guthaben) VALUES (NULL, '$name', '$loginname', '$hashed_password', $guthaben)";
+        $query = "INSERT INTO mannschaft(id, name, loginname, passwort, guthaben) VALUES (NULL, '$name', '$loginname', '$hashed_password', $guthaben)";
         
         $res = $db_connection->query($query, PDO::FETCH_ASSOC);
         
@@ -177,9 +177,9 @@ function getUsername($id, $admin){
     $db_connection = get_db_connection();
 
     if ($admin == false) {
-        $query = "SELECT m.* FROM mannschaft m WHERE m.ID = $id";
+        $query = "SELECT m.* FROM mannschaft m WHERE m.id = $id";
     } else {
-        $query = "SELECT a.* FROM admin a WHERE a.ID = $id";
+        $query = "SELECT a.* FROM admin a WHERE a.id = $id";
     }
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
@@ -196,7 +196,7 @@ function getTeuerstenPlayer() {
 
     $db_connection = get_db_connection();
 
-    $query = "SELECT MAX(ba.Preis), s.Name FROM bietet_auf ba JOIN spieler s ON s.ID = ba.spieler_fk JOIN mannschaft m  ON m.ID = ba.mannschaft_fk";
+    $query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $spieler = $statement->fetch();
@@ -207,7 +207,7 @@ function getTeuerstenPlayer() {
 function seeOfferedPlayers($id){
     $db_connection = get_db_connection();
 
-    $query = "SELECT ba.Preis, s.Name, s.Position, s.Mannschaft FROM bietet_auf ba JOIN spieler s ON s.ID = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
+    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $offers = $statement->fetchAll();
@@ -227,7 +227,7 @@ function editPassword($currentpassword, $newpassword, $id) {
 
     $db_connection = get_db_connection();
 
-    $verifyPasswordQuery = "SELECT m.Passwort, m.ID FROM mannschaft m WHERE m.id = $id";
+    $verifyPasswordQuery = "SELECT m.passwort, m.id FROM mannschaft m WHERE m.id = $id";
 
     $statement = $db_connection->query($verifyPasswordQuery, PDO::FETCH_ASSOC);
     $eintrag = $statement->fetch();
@@ -236,7 +236,7 @@ function editPassword($currentpassword, $newpassword, $id) {
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
 
     if (password_verify($currentpassword, $hashed_password)) {
-        $editPassword = "UPDATE mannschaft SET Passwort = '$newpassword' WHERE mannschaft.ID = $id";
+        $editPassword = "UPDATE mannschaft SET passwort = '$newpassword' WHERE mannschaft.id = $id";
         $statement = $db_connection->query($editPassword, PDO::FETCH_ASSOC);
         return $statement->execute();
     } else 
@@ -246,7 +246,7 @@ function editPassword($currentpassword, $newpassword, $id) {
 function changeUsersettings($id, $newname, $newloginname, $newpassword) {
     $state = true;
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
-    $query = "UPDATE mannschaft SET Name = '$newname', Loginname = '$newloginname', Passwort = '$newpassword' WHERE mannschaft.ID = $id";
+    $query = "UPDATE mannschaft SET Name = '$newname', loginname = '$newloginname', passwort = '$newpassword' WHERE mannschaft.id = $id";
     $db_connection = get_db_connection();
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
