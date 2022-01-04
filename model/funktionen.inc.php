@@ -31,7 +31,8 @@ function SETADMIN($username, $password){
 function get_players(){
     $db_connection = get_db_connection();
     $query = "SELECT spieler.id, spieler.name, spieler.position, spieler.mannschaft FROM spieler";
-    return $db_connection->query($query, PDO::FETCH_ASSOC);
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
 }
 
 function get_player($id)
@@ -112,6 +113,7 @@ function getPlayerImage($playername, $cardyear = 2021){
 }
 
 //Durch Teamnamen die Image URL bekommen und zurückgeben
+#input: heimmannschaft von spieler
 function getTeamImage($team) {
 
     //Die eingegebenen Werte in Lowercase umwandeln
@@ -166,41 +168,45 @@ function register($loginname, $pwd, $name, $guthaben) {
 
 }
 
+#WISO BEI ADMIN 2 RÜCKGABEWERTE??
 function getUsername($id, $admin){
     $db_connection = get_db_connection();
 
     if ($admin == false) {
-        $query = "SELECT m.* FROM mannschaft m WHERE m.id = $id";
+        $query = "SELECT m.loginname FROM mannschaft m WHERE m.id = $id";
     } else {
-        $query = "SELECT a.* FROM admin a WHERE a.id = $id";
+        $query = "SELECT a.name FROM admin a WHERE a.id = $id";
     }
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
     $eintrag = $statement->fetch();
 
     if ($admin == true) {
-        $eintrag['Loginname'] = $eintrag['Name'];
+        $eintrag['loginname'] = $eintrag['name'];
     }
 
     return $eintrag;
 }
 
+/**
+ * REWORK
+ */
 function getTeuerstenPlayer() {
 
     $db_connection = get_db_connection();
 
     $query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
 
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    $spieler = $statement->fetch();
+    //$statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    //$spieler = $statement->fetch();
 
-    return $spieler;
+    //return $spieler;
 }
 
-function seeOfferedPlayers($id){
+function seeOfferedPlayers($mannschaft_id){
     $db_connection = get_db_connection();
 
-    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
+    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $mannschaft_id";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $offers = $statement->fetchAll();
@@ -209,11 +215,11 @@ function seeOfferedPlayers($id){
 }
 
 function comparePassword($password1, $password2) {
-    if ($password1 == $password2) 
+    if(strcmp($password1,$password2)==0){
         return true;
-    else
+    }else{
         return false;
-    
+    }    
 }
 
 function editPassword($currentpassword, $newpassword, $id) {
