@@ -139,3 +139,10 @@ echo "<textarea>";
 var_dump(success());
 echo "</textarea>";
 nl2();
+
+echo "getTimestampWhenSpielerNichtMehrUnterVertragIst";
+nl();
+echo "<textarea>";
+var_dump(getTimestampWhenSpielerNichtMehrUnterVertragIst(3));
+echo "</textarea>";
+nl2();

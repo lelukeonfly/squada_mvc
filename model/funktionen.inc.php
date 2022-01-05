@@ -191,27 +191,39 @@ function getUsername($id, $admin){
 /**
  * REWORK
  */
-function getTeuerstenPlayer() {
+#function getTeuerstenPlayer() {
+#
+#    $db_connection = get_db_connection();
+#
+#    $query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
+#
+#    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+#    $spieler = $statement->fetch();
+#
+#    return $spieler;
+#}
 
-    $db_connection = get_db_connection();
-
-    $query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
-
-    //$statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    //$spieler = $statement->fetch();
-
-    //return $spieler;
+function getTeuerstenPlayer()
+{
 }
 
-function seeOfferedPlayers($mannschaft_id){
-    $db_connection = get_db_connection();
 
-    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $mannschaft_id";
+/**
+ * REWORK
+ */
+#function seeOfferedPlayers($mannschaft_id){
+#    $db_connection = get_db_connection();
+#
+#    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $mannschaft_id";
+#
+#    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+#    $offers = $statement->fetchAll();
+#
+#    return $offers;
+#}
 
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    $offers = $statement->fetchAll();
-
-    return $offers;
+function seeOfferedPlayers($mannschaft_id)
+{
 }
 
 function comparePassword($password1, $password2) {
@@ -330,4 +342,32 @@ function getLogoURL(){
 function success()
 {
     return isset($login) && $login == false; // <-- Does not work
+}
+
+
+/**
+ * Dauer und Vertragszeit in DB als Integer (Sekunden) gespeichert
+ * Berechnet wann Spieler außer Vertrag ist
+ */
+function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
+{
+    $db_connection = get_db_connection();
+
+    $query = "SELECT anfang, dauer, vertragszeit FROM auktion WHERE spieler_fk = $spielerId";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $daten = $statement->fetch();
+    extract($daten);
+
+    //Funktion strtotime werden Sekunden zum Anfang addiert
+    $out = date('Y-m-d H:i:s',strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds"));
+    return $out;
+}
+
+//gibt spieler welche nicht in vertrag sind aus
+function getPlayersNotInVertrag()
+{
+    $db_connection = get_db_connection();
+    $query = "";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+
 }
