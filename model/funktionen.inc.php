@@ -367,7 +367,7 @@ function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
 function getPlayersNotInVertrag()
 {
     $db_connection = get_db_connection();
-    $query = "SELECT spieler.id, spieler.name, auktion.anfang, auktion.dauer, auktion.vertragszeit FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk";
+    $query = "SELECT spieler.id, spieler.name, auktion.anfang, auktion.dauer, auktion.vertragszeit FROM spieler LEFT JOIN auktion ON spieler.id = auktion.spieler_fk";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $data = $statement->fetchAll();
 

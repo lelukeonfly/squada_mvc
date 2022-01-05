@@ -151,7 +151,7 @@ nl2();
 
 echo "getPlayersNotInVertrag";
 nl();
-#echo "<textarea>";
+echo "<textarea>";
 var_dump(getPlayersNotInVertrag());
-#echo "</textarea>";
+echo "</textarea>";
 nl2();
