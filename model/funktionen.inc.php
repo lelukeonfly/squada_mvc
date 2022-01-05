@@ -393,3 +393,29 @@ function getPlayersNotInVertrag()
 
     return $playerArray;
 }
+
+/**
+ * Funktion für insert into auktion tabelle
+ */
+
+function setAuktion($array)
+{
+    extract($array);
+
+    $db_connection = get_db_connection();
+    $query = "INSERT INTO auktion(anfang, dauer, spieler_fk, vertragszeit) VALUES ('$anfang','$dauer','$spieler_fk','$vertragszeit')";
+    $db_connection->query($query);
+}
+
+
+/**
+ * Funktion für insert into nimmt_teil tabelle
+ */
+function setNimmt_teil($array)
+{
+    extract($array);
+
+    $db_connection = get_db_connection();
+    $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, wann, geld) VALUES ('$mannschaft_fk','$auktion_fk','$wann','$geld')";
+    $db_connection->query($query);
+}
