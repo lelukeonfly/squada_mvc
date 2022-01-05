@@ -14,7 +14,9 @@ echo "<br />";
 
 echo "get_db_connection";
 nl();
+echo "<textarea>";
 var_dump(get_db_connection());
+echo "</textarea>";
 nl2();
 
 #miss: SETADMIN()
@@ -145,4 +147,11 @@ nl();
 echo "<textarea>";
 var_dump(getTimestampWhenSpielerNichtMehrUnterVertragIst(3));
 echo "</textarea>";
+nl2();
+
+echo "getPlayersNotInVertrag";
+nl();
+#echo "<textarea>";
+var_dump(getPlayersNotInVertrag());
+#echo "</textarea>";
 nl2();
