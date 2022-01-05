@@ -393,6 +393,3 @@ function getPlayersNotInVertrag()
 
     return $playerArray;
 }
-
-
-//PROBLEM:: WENN AUKTION GESTARTET ^^^^^^^ SPIELER NICHT MEHR SICHTBAR????
