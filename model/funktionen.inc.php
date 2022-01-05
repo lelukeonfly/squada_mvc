@@ -378,9 +378,11 @@ function getPlayersNotInVertrag()
         //neues array für einzelnen player
         $one = array();
         extract($player);
-        //add(anfang+dauer+vertragszeit)
-        $time = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
-        if(time()>$time){
+        //zeit nach vertrag ende -> add(anfang+dauer+vertragszeit)
+        $endtime = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
+        //zeit vor vertrag -> add(anfang+dauer)
+        $vorvertragtime = strtotime("$anfang + $dauer Seconds");
+        if(time()>$endtime||time()<$vorvertragtime){
             $one['id'] = $id;
             $one['name'] = $name;
             $one['anfang'] = $dauer;
@@ -391,3 +393,6 @@ function getPlayersNotInVertrag()
 
     return $playerArray;
 }
+
+
+//PROBLEM:: WENN AUKTION GESTARTET ^^^^^^^ SPIELER NICHT MEHR SICHTBAR????
