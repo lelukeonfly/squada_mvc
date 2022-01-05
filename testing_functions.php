@@ -17,6 +17,7 @@
 
 <?php
 include 'model/funktionen.inc.php';
+session_start();
 
 function nl()
 {
