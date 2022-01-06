@@ -40,6 +40,8 @@
             break;
         case 'register':
             break;
+        case 'auktion':
+            break;
     }
     
     /**
