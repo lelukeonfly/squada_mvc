@@ -419,3 +419,6 @@ function setNimmt_teil($array)
     $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, wann, geld) VALUES ('$mannschaft_fk','$auktion_fk','$wann','$geld')";
     $db_connection->query($query);
 }
+
+
+//missing functions: getAuktionId, getHoechstesGebotOnAuction($id)
