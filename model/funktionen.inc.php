@@ -422,3 +422,13 @@ function setNimmt_teil($array)
 
 
 //missing functions: getAuktionId, getHoechstesGebotOnAuction($id)
+
+function getAuktionId()
+{
+    # code...
+}
+
+function getHoechstesGebotOnAuction($auction_id)
+{
+    $query = "SELECT MAX(nimmt_teil.geld) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.id = $auction_id";
+}
