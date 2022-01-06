@@ -187,6 +187,22 @@ echo "<textarea>";
 var_dump(getPlayersNotInVertrag());
 echo "</textarea>";
 echo "</div>";
+
+echo "<div>";
+echo "getAuktionId";
+nl();
+echo "<textarea>";
+var_dump(getAuktionId());
+echo "</textarea>";
+echo "</div>";
+
+echo "<div>";
+echo "getHoechstesGebotOnAuction";
+nl();
+echo "<textarea>";
+var_dump(getHoechstesGebotOnAuction(2));
+echo "</textarea>";
+echo "</div>";
 ?> 
 </body>
 </html>
