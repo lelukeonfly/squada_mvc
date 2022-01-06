@@ -435,3 +435,7 @@ function getHoechstesGebotOnAuction($auction_id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
+
+//SELECT auktion.id FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = 3 AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = 3);
+//new:
+//SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = 3 AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = 3);
