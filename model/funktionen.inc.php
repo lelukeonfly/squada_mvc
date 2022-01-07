@@ -420,14 +420,16 @@ function setNimmt_teil($array)
     $db_connection->query($query);
 }
 
-
-//missing functions: getAuktionId, getHoechstesGebotOnAuction($id)
-
-function getAuktionId()
+//holt id von aukton mit höchstem datum
+function getAuktionId($player_id)
 {
-    # code...
+    $db_connection = get_db_connection();
+    $query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
 }
 
+//gibt das höchste gebot einer auktion zurück
 function getHoechstesGebotOnAuction($auction_id)
 {
     $db_connection = get_db_connection();
@@ -435,7 +437,3 @@ function getHoechstesGebotOnAuction($auction_id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
-
-//SELECT auktion.id FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = 3 AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = 3);
-//new:
-//SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = 3 AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = 3);

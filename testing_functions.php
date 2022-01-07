@@ -192,7 +192,7 @@ echo "<div>";
 echo "getAuktionId";
 nl();
 echo "<textarea>";
-var_dump(getAuktionId());
+var_dump(getAuktionId(101));
 echo "</textarea>";
 echo "</div>";
 

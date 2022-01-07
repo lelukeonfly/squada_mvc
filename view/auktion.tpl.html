@@ -6,6 +6,17 @@
                 require_once 'model/select_option_spieler.php';
             ?>
         </select>
+        <!--https://pt.stackoverflow.com/questions/138489/como-fa%C3%A7o-para-mostrar-o-value-do-input-type-range-->
+        <input id="money" type="range" value="50" min="<!--input here highest gebot +1-->" max="100">
+        <span id="moneyvaluedisplay"><!--input here highest gebot +1--></span>
+        <script>
+            var $range = document.getElementById('money');
+            var $value = document.getElementById('moneyvaluedisplay');
+
+            $range.addEventListener('input', function(){
+                $value.textContent = this.value;
+            });
+        </script>
         <input type="submit" value="submit">
     </form>
 </div>
