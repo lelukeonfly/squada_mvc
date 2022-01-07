@@ -445,3 +445,22 @@ function getAuktionLog($auktion_id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetchAll();
 }
+
+
+function generateLogTable($spieler_id)
+{
+    var_dump(getAuktionLog($spieler_id));
+    #foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+        ?>
+    <!--    <tr>-->
+        <?php
+            #foreach ($logrow as $logdata) {
+                ?>
+                <!--<td>$logdata</td>-->
+                <?php
+            #}
+        ?>
+        <!--</tr>-->
+        <?php
+    #}
+}
