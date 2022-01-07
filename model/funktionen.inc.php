@@ -437,3 +437,11 @@ function getHoechstesGebotOnAuction($auction_id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
+
+function getAuktionLog($auktion_id)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT nimmt_teil.wann, nimmt_teil.geld, mannschaft.name FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
+}

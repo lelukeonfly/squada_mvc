@@ -203,6 +203,14 @@ echo "<textarea>";
 var_dump(getHoechstesGebotOnAuction(2));
 echo "</textarea>";
 echo "</div>";
+
+echo "<div>";
+echo "getAuktionLog";
+nl();
+echo "<textarea>";
+var_dump(getAuktionLog(2));
+echo "</textarea>";
+echo "</div>";
 ?> 
 </body>
 </html>
