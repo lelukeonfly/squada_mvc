@@ -4,7 +4,7 @@ function get_db_connection()
         $host = "localhost";
         $user = "root";
         $pwd = "";
-        $schema = "auktion_testing";
+        $schema = "squada";
 
         try {
             $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
@@ -195,6 +195,27 @@ function getUsername($id, $admin){
     return $eintrag;
 }
 
+function getUser($id, $admin) {
+    $db_connection = get_db_connection();
+
+    if ($admin == false) {
+        $query = "SELECT * FROM mannschaft m WHERE m.id = $id";
+    } else {
+        $query = "SELECT * FROM admin a WHERE a.id = $id";
+    }
+
+    //Statement wird abgesetzt
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
+    $eintrag = $statement->fetch();
+
+    //Um bugs zu verhindern, falls admin = true ist der eintrag in der spalte name auch in den Loginnamen des eintrags gespeichert, da die admintabelle über keine spalte "loginname" verfügt. (um bugs zu verhindern)
+    if ($admin == true) {
+        $eintrag['loginname'] = $eintrag['name'];
+    }
+
+    return $eintrag;
+}
+
 //Den teuersten Spieler zurückzugen, in form eines Arrays
 function getTeuerstenPlayer() {
 
@@ -205,6 +226,7 @@ function getTeuerstenPlayer() {
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $spieler = $statement->fetch();
 
+}
 
 //Auf dem Dashboard wird je nach aktueller Zeit, "Good morning" oder "Good afternoon" angezeigt, dies wird mit der date() funktion in php überprüft
 function getTimeState() {
@@ -222,8 +244,17 @@ function getTimeState() {
 //Gibt alle Spieler zurück, auf welche diese Mannschaft gesetzt hat
 function seeOfferedPlayers($id){
     $db_connection = get_db_connection();
+    $query = "SELECT s.id, nt.wann, nt.geld, m.name, a.anfang, a.dauer, a.vertragszeit, s.name, s.position, s.mannschaft FROM nimmt_teil nt
+    JOIN mannschaft m ON m.id = nt.mannschaft_fk
+    JOIN auktion a ON nt.auktion_fk = a.id
+    JOIN spieler s ON a.spieler_fk = s.id
+    WHERE m.id = 1";
+    
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $offers = $statement->fetchAll();
 
-    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
+    return $offers;
+
 }
 /**
  * REWORK
@@ -239,9 +270,9 @@ function seeOfferedPlayers($id){
 #    return $offers;
 #}
 
-function seeOfferedPlayers($mannschaft_id)
-{
-}
+// function seeOfferedPlayers($mannschaft_id)
+// {
+// }
 
 //Vergleicht zwei Passwörter in ungehashter ansicht
 function comparePassword($password1, $password2) {
@@ -471,7 +502,7 @@ function getAuktionLog($auktion_id)
     return $statement->fetchAll();
 }
 
-
+/*
 function generateLogTable($spieler_id)
 {
     var_dump(getAuktionLog($spieler_id));
@@ -489,3 +520,6 @@ function generateLogTable($spieler_id)
         <?php
     #}
 }
+
+
+*/

@@ -1,5 +1,5 @@
 <?php require_once 'model/logedin.php'; ?>
-    <?php $user = getUsername($_SESSION['user'], $_SESSION['admin']); ?>
+    <?php $user = getUser($_SESSION['user'], $_SESSION['admin']); ?>
     <!-- Page content-->
     <div class="container">
         <div class="text-center mt-5">
@@ -9,12 +9,12 @@
                 <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" id="name"
-                        name="name" placeholder="Enter Name" value="<?=$user['Name']?>"  required>
+                        name="name" placeholder="Enter Name" value="<?=$user['name']?>"  required>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Loginname</label>
                     <input type="text" class="form-control" id="loginname" name="loginname"
-                        placeholder="Loginname" value="<?=$user['Loginname']?>" required>
+                        placeholder="Loginname" value="<?=$user['loginname']?>" required>
                 </div>
                 <div class="form-group">
                     <label for="Passwort">Passwort</label>
