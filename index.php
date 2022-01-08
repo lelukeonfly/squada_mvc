@@ -45,6 +45,8 @@
         case 'changepwd':
             $res = ResultUpdatePwd();
             break;
+        case 'auktion':
+            break;
     }
     
     /**

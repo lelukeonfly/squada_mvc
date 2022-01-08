@@ -31,7 +31,8 @@ function SETADMIN($username, $password){
 function get_players(){
     $db_connection = get_db_connection();
     $query = "SELECT spieler.id, spieler.name, spieler.position, spieler.mannschaft FROM spieler";
-    return $db_connection->query($query, PDO::FETCH_ASSOC);
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
 }
 
 function get_player($id)
@@ -41,13 +42,6 @@ function get_player($id)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
-
-#function get_column_names($tablename)
-#{
-#    $db_connection = get_db_connection();
-#    $query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='squada' AND `TABLE_NAME`='$tablename';";
-#    return $db_connection->query($query);
-#}
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
 function log_in($username, $pwd, $admin) {
@@ -119,6 +113,7 @@ function getPlayerImage($playername, $cardyear = 2021){
 }
 
 //Durch Teamnamen die Image URL bekommen und zurückgeben
+#input: heimmannschaft von spieler
 function getTeamImage($team) {
 
     //Die eingegebenen Werte in Lowercase umwandeln
@@ -177,14 +172,15 @@ function register($loginname, $pwd, $name, $guthaben) {
 
 }
 
+
 //Mithilfe der ID und den Adminstatus die Spalte eines Usernamens bekommen
 function getUsername($id, $admin){
     $db_connection = get_db_connection();
 
     if ($admin == false) {
-        $query = "SELECT m.* FROM mannschaft m WHERE m.id = $id";
+        $query = "SELECT m.loginname FROM mannschaft m WHERE m.id = $id";
     } else {
-        $query = "SELECT a.* FROM admin a WHERE a.id = $id";
+        $query = "SELECT a.name FROM admin a WHERE a.id = $id";
     }
 
     //Statement wird abgesetzt
@@ -209,8 +205,6 @@ function getTeuerstenPlayer() {
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $spieler = $statement->fetch();
 
-    return $spieler;
-}
 
 //Auf dem Dashboard wird je nach aktueller Zeit, "Good morning" oder "Good afternoon" angezeigt, dies wird mit der date() funktion in php überprüft
 function getTimeState() {
@@ -230,20 +224,32 @@ function seeOfferedPlayers($id){
     $db_connection = get_db_connection();
 
     $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $id";
+}
+/**
+ * REWORK
+ */
+#function seeOfferedPlayers($mannschaft_id){
+#    $db_connection = get_db_connection();
+#
+#    $query = "SELECT ba.preis, s.name, s.position, s.mannschaft FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk WHERE ba.mannschaft_fk = $mannschaft_id";
+#
+#    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+#    $offers = $statement->fetchAll();
+#
+#    return $offers;
+#}
 
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    $offers = $statement->fetchAll();
-
-    return $offers;
+function seeOfferedPlayers($mannschaft_id)
+{
 }
 
 //Vergleicht zwei Passwörter in ungehashter ansicht
 function comparePassword($password1, $password2) {
-    if ($password1 == $password2) 
+    if(strcmp($password1,$password2)==0){
         return true;
-    else
+    }else{
         return false;
-    
+    }    
 }
 
 //Falls nur das Passwort einer Mannschaft geändert werden soll wird das mit dieser Funktion abgeändet
@@ -361,4 +367,125 @@ function getLogoURL(){
 function success()
 {
     return isset($login) && $login == false; // <-- Does not work
+}
+
+
+/**
+ * Dauer und Vertragszeit in DB als Integer (Sekunden) gespeichert
+ * Berechnet wann Spieler außer Vertrag ist
+ */
+function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
+{
+    $db_connection = get_db_connection();
+
+    $query = "SELECT anfang, dauer, vertragszeit FROM auktion WHERE spieler_fk = $spielerId";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $daten = $statement->fetch();
+    extract($daten);
+
+    //Funktion strtotime werden Sekunden zum Anfang addiert
+    $out = date('Y-m-d H:i:s',strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds"));
+    return $out;
+}
+
+//gibt spieler welche nicht in vertrag sind aus
+function getPlayersNotInVertrag()
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT spieler.id, spieler.name, auktion.anfang, auktion.dauer, auktion.vertragszeit FROM spieler LEFT JOIN auktion ON spieler.id = auktion.spieler_fk";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $data = $statement->fetchAll();
+
+    //neues array für return (sammlung von player)
+    $playerArray = array();
+    //loop durch jeden player
+    foreach($data as $player){
+        //neues array für einzelnen player
+        $one = array();
+        extract($player);
+        //zeit nach vertrag ende -> add(anfang+dauer+vertragszeit)
+        $endtime = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
+        //zeit vor vertrag -> add(anfang+dauer)
+        $vorvertragtime = strtotime("$anfang + $dauer Seconds");
+        if(time()>$endtime||time()<$vorvertragtime){
+            $one['id'] = $id;
+            $one['name'] = $name;
+            $one['anfang'] = $dauer;
+            $one['vertragszeit'] = $vertragszeit;
+            $playerArray[] = $player;
+        }
+    }
+
+    return $playerArray;
+}
+
+/**
+ * Funktion für insert into auktion tabelle
+ */
+
+function setAuktion($array)
+{
+    extract($array);
+
+    $db_connection = get_db_connection();
+    $query = "INSERT INTO auktion(anfang, dauer, spieler_fk, vertragszeit) VALUES ('$anfang','$dauer','$spieler_fk','$vertragszeit')";
+    $db_connection->query($query);
+}
+
+
+/**
+ * Funktion für insert into nimmt_teil tabelle
+ */
+function setNimmt_teil($array)
+{
+    extract($array);
+
+    $db_connection = get_db_connection();
+    $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, wann, geld) VALUES ('$mannschaft_fk','$auktion_fk','$wann','$geld')";
+    $db_connection->query($query);
+}
+
+//holt id von aukton mit höchstem datum
+function getAuktionId($player_id)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
+}
+
+//gibt das höchste gebot einer auktion zurück
+function getHoechstesGebotOnAuction($auction_id)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT MAX(nimmt_teil.geld) as max FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.id = $auction_id";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
+}
+
+function getAuktionLog($auktion_id)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT nimmt_teil.wann, nimmt_teil.geld, mannschaft.name FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
+}
+
+
+function generateLogTable($spieler_id)
+{
+    var_dump(getAuktionLog($spieler_id));
+    #foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+        ?>
+    <!--    <tr>-->
+        <?php
+            #foreach ($logrow as $logdata) {
+                ?>
+                <!--<td>$logdata</td>-->
+                <?php
+            #}
+        ?>
+        <!--</tr>-->
+        <?php
+    #}
 }

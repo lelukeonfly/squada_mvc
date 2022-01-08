@@ -1,0 +1,37 @@
+<script>
+    $(document).ready(function () {
+        $('#spieler').change(function () {
+            //Selected value
+            var inputValue = $(this).val();
+            //debug
+            alert("value in js "+inputValue);
+
+            //Ajax for calling php function
+            $.post('model/log.php', {
+                dropdownValue: inputValue
+            }, function (data) {
+                //alert('ajax completed. Response:  '+data);
+                //do after submission operation in DOM
+
+                document.getElementById("output").innerHTML = data;
+            });
+        });
+    });
+</script>
+<div>
+    <form action="index.php?aktion=auktion" method="POST">
+        <label for="spieler">Spieler:</label>
+        <select name="spieler" id="spieler">
+            <?php
+                require_once 'model/select_option_spieler.php';
+            ?>
+        </select>
+        <input id="money" type="number" min="0">
+        <input name="auktionsubmit" type="submit" value="submit">
+    </form>
+    <hr>
+    <div>
+        <table id="output"></table>
+    </div>
+    
+</div>
