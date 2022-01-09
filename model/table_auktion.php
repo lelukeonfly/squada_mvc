@@ -3,7 +3,7 @@
         <?php
         foreach (getSpielerMannschaften() as $mannschaft) {
         ?>
-            <div class="col-sm">
+            <div class="col-sm-6">
                 <h1 class="display-4"><?= $mannschaft['mannschaft']; ?></h1>
                 <table class="table">
                     <?php
@@ -47,7 +47,7 @@
                 ?>
                 </table>
             </div>
-            <div class="w-100"></div>
+            
             <?php } ?>
         </div>
         
