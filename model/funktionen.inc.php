@@ -1,33 +1,34 @@
 <?php
 function get_db_connection()
-    {
-        $host = "localhost";
-        $user = "root";
-        $pwd = "";
-        $schema = "squada";
+{
+    $host = "localhost";
+    $user = "root";
+    $pwd = "";
+    $schema = "squada";
 
-        try {
-            $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $db;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+    try {
+        $db = new PDO('mysql:host=' . $host . ';dbname=' . $schema . ';port=3306', $user, $pwd);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
     }
+}
 
 
-function DBcheck() {
-$db = get_db_connection();
+function DBcheck()
+{
+    $db = get_db_connection();
 
     if ($db == true) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
 
-function get_players(){
+function get_players()
+{
     $db_connection = get_db_connection();
     $query = "SELECT spieler.id, spieler.name, spieler.position, spieler.mannschaft FROM spieler";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
@@ -42,9 +43,9 @@ function get_player($id)
     $query = "SELECT spieler.name, spieler.position, spieler.mannschaft, mannschaft.name as originalmannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $return = $statement->fetch();
-    if(isset($return['originalmannschaft'])){
+    if (isset($return['originalmannschaft'])) {
         return $return;
-    }else{
+    } else {
         $query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id = $id LIMIT 1";
         $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
         $return = $statement->fetch();
@@ -57,28 +58,27 @@ function get_player($id)
 }
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
-function log_in($username, $pwd, $admin) {
-    
+function log_in($username, $pwd, $admin)
+{
+
     //Aufbau der DB Connection
     $db = get_db_connection();
 
     //Absetzen der DB Query
     if ($admin == false) {
         $query = "SELECT m.loginname, m.passwort, m.id, m.name FROM mannschaft m WHERE m.loginname = '$username'";
-    }
-    else {
+    } else {
         $query = "SELECT a.id, a.name, a.passwort FROM admin a WHERE a.Name = '$username'";
     }
     $statement = $db->query($query, PDO::FETCH_ASSOC);
 
-    $num = $statement->rowCount(); 
+    $num = $statement->rowCount();
     $eintrag = $statement->fetch();
-    var_dump($eintrag);
     $hash = $eintrag['passwort'];
-    
+
 
     //Überprüfen, ob der eintrag *nicht* null ist
-    if($eintrag != null) {
+    if ($eintrag != null) {
         //Wenn min. ein User errscheind wird in der Session die ID des eingeloggten Benutzers geschrieben
         if ($num == 1) {
             if (password_verify($pwd, $hash)) {
@@ -89,19 +89,17 @@ function log_in($username, $pwd, $admin) {
             } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
-    }
-    else {
+    } else {
         return false;
     }
-
 }
 
 //Durch Playerinfos die Image URL bekommen und zurückgeben
-function getPlayerImage($playername, $cardyear = 2021){
+function getPlayerImage($playername, $cardyear = 2021)
+{
 
     //Die eingegebenen Werte in Caps umwandeln.
     $playername = strtoupper($playername);
@@ -109,43 +107,41 @@ function getPlayerImage($playername, $cardyear = 2021){
     $first = $arr[0];
 
     $url = "https://content.fantacalcio.it/web/campioncini/card$cardyear/$first.png";
-    $image_type_check = @exif_imagetype($url);//Get image type + check if exists
-    
+    $image_type_check = @exif_imagetype($url); //Get image type + check if exists
+
     //Wenn kein Img gefunden wird, wird ein general img verwendet.
     $noimage = "https://content.fantacalcio.it/web/campioncini/card2021/NO-CAMPIONCINO.png";
 
     //Überprüfen ob das Image existiert
-    if (strpos($http_response_header[0], "403") || strpos($http_response_header[0], "404") || strpos($http_response_header[0], "302") || strpos($http_response_header[0], "301") ) {
+    if (strpos($http_response_header[0], "403") || strpos($http_response_header[0], "404") || strpos($http_response_header[0], "302") || strpos($http_response_header[0], "301")) {
         return $noimage;
-    }
-    else {
+    } else {
         return $url;
     }
-
-
 }
 
 //Durch Teamnamen die Image URL bekommen und zurückgeben
 #input: heimmannschaft von spieler
-function getTeamImage($team) {
+function getTeamImage($team)
+{
 
     //Die eingegebenen Werte in Lowercase umwandeln
     $team = strtolower($team);
     $url = "https://content.fantacalcio.it/web/img/team/$team.png";
-    $image_type_check = @exif_imagetype($url);//Get image type + check if exists
+    $image_type_check = @exif_imagetype($url); //Get image type + check if exists
     $noimage = "view/img/team-placeholder.png";
 
     //Überprüfen, ob bild existiert
-    if (strpos($http_response_header[0], "403") || strpos($http_response_header[0], "404") || strpos($http_response_header[0], "302") || strpos($http_response_header[0], "301") ) 
+    if (strpos($http_response_header[0], "403") || strpos($http_response_header[0], "404") || strpos($http_response_header[0], "302") || strpos($http_response_header[0], "301"))
         return $noimage;
     else {
         return $url;
     }
-
 }
-    
+
 //Überprüfen on User eingeloggt ist
-function is_logged_in() {
+function is_logged_in()
+{
     $sol = false;
 
     //In session nachsehen ob eintrag existiert
@@ -158,16 +154,17 @@ function is_logged_in() {
 }
 
 //Admin Funktion: Registrieren von neuen Mannschaften
-function register($loginname, $pwd, $name, $guthaben) {
+function register($loginname, $pwd, $name, $guthaben)
+{
     $db_connection = get_db_connection();
 
     //Zuerst überprüfen, ob dieser Name schon existiert
     $checkquery = "SELECT * FROM mannschaft m WHERE m.loginname = '$loginname'";
-    $check = $db_connection->query($checkquery, PDO::FETCH_ASSOC); 
+    $check = $db_connection->query($checkquery, PDO::FETCH_ASSOC);
     $usr = $check->fetch();
 
-    $num = $check->rowCount(); 
-     //Wenn loginname schon existiert wird die Funktion abgebrochen und der Admin wird informiert
+    $num = $check->rowCount();
+    //Wenn loginname schon existiert wird die Funktion abgebrochen und der Admin wird informiert
     if ($num >= 1) {
         return false;
     }
@@ -175,19 +172,17 @@ function register($loginname, $pwd, $name, $guthaben) {
     else {
         $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
         $query = "INSERT INTO mannschaft(id, name, loginname, passwort, guthaben) VALUES (NULL, '$name', '$loginname', '$hashed_password', $guthaben)";
-        
-        $res = $db_connection->query($query, PDO::FETCH_ASSOC);
-        
-        return true;
-       
-    }
-   
 
+        $res = $db_connection->query($query, PDO::FETCH_ASSOC);
+
+        return true;
+    }
 }
 
 
 //Mithilfe der ID und den Adminstatus die Spalte eines Usernamens bekommen
-function getUsername($id, $admin){
+function getUsername($id, $admin)
+{
     $db_connection = get_db_connection();
 
     if ($admin == false) {
@@ -197,7 +192,7 @@ function getUsername($id, $admin){
     }
 
     //Statement wird abgesetzt
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $eintrag = $statement->fetch();
 
     //Um bugs zu verhindern, falls admin = true ist der eintrag in der spalte name auch in den Loginnamen des eintrags gespeichert, da die admintabelle über keine spalte "loginname" verfügt. (um bugs zu verhindern)
@@ -208,7 +203,8 @@ function getUsername($id, $admin){
     return $eintrag;
 }
 
-function getUser($id, $admin) {
+function getUser($id, $admin)
+{
     $db_connection = get_db_connection();
 
     if ($admin == false) {
@@ -218,7 +214,7 @@ function getUser($id, $admin) {
     }
 
     //Statement wird abgesetzt
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC); 
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $eintrag = $statement->fetch();
 
     //Um bugs zu verhindern, falls admin = true ist der eintrag in der spalte name auch in den Loginnamen des eintrags gespeichert, da die admintabelle über keine spalte "loginname" verfügt. (um bugs zu verhindern)
@@ -230,7 +226,8 @@ function getUser($id, $admin) {
 }
 
 //Den teuersten Spieler zurückzugen, in form eines Arrays
-function getTeuerstenPlayer() {
+function getTeuerstenPlayer()
+{
 
     $db_connection = get_db_connection();
 
@@ -241,36 +238,36 @@ function getTeuerstenPlayer() {
     $spieler = $statement->fetch();
 
     return $spieler;
-
 }
 
 //Auf dem Dashboard wird je nach aktueller Zeit, "Good morning" oder "Good afternoon" angezeigt, dies wird mit der date() funktion in php überprüft
-function getTimeState() {
+function getTimeState()
+{
 
     $timeOfDay = date('a');
     //Falls Vormittag
-    if($timeOfDay == 'am'){
+    if ($timeOfDay == 'am') {
         return 'Good morning';
-    //Falls nachmittag
-    }else{
+        //Falls nachmittag
+    } else {
         return 'Good afternoon';
     }
 }
 
 //Gibt alle Spieler zurück, auf welche diese Mannschaft gesetzt hat
-function seeOfferedPlayers($id){
+function seeOfferedPlayers($id)
+{
     $db_connection = get_db_connection();
     $query = "SELECT s.id, nt.wann, nt.geld, m.name, a.anfang, a.dauer, a.vertragszeit, s.name, s.position, s.mannschaft FROM nimmt_teil nt
     JOIN mannschaft m ON m.id = nt.mannschaft_fk
     JOIN auktion a ON nt.auktion_fk = a.id
     JOIN spieler s ON a.spieler_fk = s.id
     WHERE m.id = 1";
-    
+
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $offers = $statement->fetchAll();
 
     return $offers;
-
 }
 /**
  * REWORK
@@ -288,16 +285,18 @@ function seeOfferedPlayers($id){
 
 
 //Vergleicht zwei Passwörter in ungehashter ansicht
-function comparePassword($password1, $password2) {
-    if(strcmp($password1,$password2)==0){
+function comparePassword($password1, $password2)
+{
+    if (strcmp($password1, $password2) == 0) {
         return true;
-    }else{
+    } else {
         return false;
-    }    
+    }
 }
 
 //Falls nur das Passwort einer Mannschaft geändert werden soll wird das mit dieser Funktion abgeändet
-function editPassword($newpassword, $id) {
+function editPassword($newpassword, $id)
+{
 
     $db_connection = get_db_connection();
 
@@ -309,7 +308,8 @@ function editPassword($newpassword, $id) {
 }
 
 
-function changeUsersettings($id, $newname, $newloginname, $newpassword) {
+function changeUsersettings($id, $newname, $newloginname, $newpassword)
+{
     $state = true;
     $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
     $query = "UPDATE mannschaft SET Name = '$newname', loginname = '$newloginname', passwort = '$newpassword' WHERE mannschaft.id = $id";
@@ -324,45 +324,48 @@ function changeUsersettings($id, $newname, $newloginname, $newpassword) {
     return $state;
 }
 
-function ResultchangeCreateMannschaft() {
+function ResultchangeCreateMannschaft()
+{
     if ($_POST) {
         $res = register($_POST['loginname'], $_POST['passwort'], $_POST['name'], $_POST['guthaben']);
         return $res;
     }
 }
 
-function ResultUpdatePwd() {
+function ResultUpdatePwd()
+{
     if ($_POST) {
         $res = editPassword($_POST['password'], $_POST['id']);
         return $res;
     }
 }
 
-function ResultchangeUsersettings(){
+function ResultchangeUsersettings()
+{
     if ($_POST) {
-        $update =changeUsersettings($_SESSION['user'], $_POST['name'], $_POST['loginname'], $_POST['passwort']);
+        $update = changeUsersettings($_SESSION['user'], $_POST['name'], $_POST['loginname'], $_POST['passwort']);
         return $update;
     }
 }
 
-function setGuthaben($id){
-
+function setGuthaben($id)
+{
 }
 
-function bieten(){
-
+function bieten()
+{
 }
 
 /**
  * used to load the menubar after the head() fun
  */
-function navbar(){
+function navbar()
+{
     //Responsive navbar
     if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
         #require_once "imports/menubar.php";
         require_once 'view/html_template/html_menubar.html';
-    } 
-    else {
+    } else {
         #require_once "imports/navbar.php";
         require_once 'view/html_template/html_navbar.html';
     }
@@ -384,16 +387,17 @@ function footer()
     require_once 'view/html_template/html_footer.html';
 }
 
-function loginResult($admin){
+function loginResult($admin)
+{
     $result = true;
-    if(isset($_POST['loginname']) && isset($_POST['pwd'])){
+    if (isset($_POST['loginname']) && isset($_POST['pwd'])) {
 
         $result = log_in($_POST['loginname'], $_POST['pwd'], $admin);
         if ($result == true) {
             #leite zu index mit aktion dashbloard weiter (mvc)
             header('Location: index.php?aktion=dashboard');
         }
-        }
+    }
     return $result;
 }
 
@@ -404,8 +408,9 @@ function logout()
     header("Location:index.php");
 }
 
-function getLogoURL(){
-    return $_SERVER['DOCUMENT_ROOT']."/view/img/LOGO.png";
+function getLogoURL()
+{
+    return $_SERVER['DOCUMENT_ROOT'] . "/view/img/LOGO.png";
 }
 
 function success()
@@ -428,7 +433,7 @@ function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
     extract($daten);
 
     //Funktion strtotime werden Sekunden zum Anfang addiert
-    $out = date('Y-m-d H:i:s',strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds"));
+    $out = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds"));
     return $out;
 }
 
@@ -443,7 +448,7 @@ function getPlayersNotInVertrag()
     //neues array für return (sammlung von player)
     $playerArray = array();
     //loop durch jeden player
-    foreach($data as $player){
+    foreach ($data as $player) {
         //neues array für einzelnen player
         $one = array();
         extract($player);
@@ -451,7 +456,7 @@ function getPlayersNotInVertrag()
         $endtime = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
         //zeit vor vertrag -> add(anfang+dauer)
         $vorvertragtime = strtotime("$anfang + $dauer Seconds");
-        if(time()>$endtime||time()<$vorvertragtime){
+        if (time() > $endtime || time() < $vorvertragtime) {
             $one['id'] = $id;
             $one['name'] = $name;
             $one['anfang'] = $dauer;
@@ -470,7 +475,7 @@ function getPlayersNotInVertrag()
 function setAuktion($spieler)
 {
     $db_connection = get_db_connection();
-    if(time()>getTimestampWhenSpielerNichtMehrUnterVertragIst($spieler)){
+    if (time() > getTimestampWhenSpielerNichtMehrUnterVertragIst($spieler)) {
         $query = "INSERT INTO auktion(spieler_fk) VALUES ('$spieler')";
         $db_connection->query($query);
     }
@@ -487,9 +492,9 @@ function setNimmt_teil($geld)
     $mannschaft_fk = $_SESSION['user'];
     $auktion_fk = getLatestAuktionId($_POST['player'])['id'];
     $money = (int)$geld;
-    var_dump($mannschaft_fk);
-    var_dump($auktion_fk);
-    var_dump($money);
+    // var_dump($mannschaft_fk);
+    // var_dump($auktion_fk);
+    // var_dump($money);
     //var_dump($money);
     $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, geld) VALUES ($mannschaft_fk,$auktion_fk,$money)";
     $db_connection->query($query);
@@ -533,48 +538,38 @@ function getAuktionLog($auktion_id)
 
 function generateLogTable($spieler_id)
 {
-    foreach (getAuktionId($spieler_id) as $auktion_id) {
-    ?>
-    <table>
-    <thead>
-    <?php
-    $x = true;
-    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
-        if($x){
-        ?>
-        <?php
-            foreach ($logrow as $header=> $data) {
-                ?>
-                <th><?=ucfirst($header);?></th>
+?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>TIME</th>
+                <th>AMOUNT IN $SQD</th>
+                <th>TEAM</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach (getAuktionId($spieler_id) as $auktion_id) { ?>
                 <?php
-                $x = false;
-            }
-        ?>
+                foreach (getAuktionLog($auktion_id['id']) as $rowname => $logrow) {
+                ?>
+                    <tr>
+                        <?php
+                        foreach ($logrow as $logdata) {
+                        ?>
+                            <td><?= $logdata; ?></td>
+                        <?php
+                        }
+                        ?>
+                    </tr>
+                <?php
+                }
+                ?>
         <?php
         }
-    }
-    ?>
-    </thead>
-    <tbody>
-    <?php
-    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
         ?>
-        <tr>
-        <?php
-            foreach ($logrow as $logdata) {
-                ?>
-                <td><?=$logdata;?></td>
-                <?php
-            }
-        ?>
-        </tr>
-        <?php
-    }
-    ?>
-    </tbody>
+        </tbody>
     </table>
-    <?php
-    }
+<?php
 }
 
 function getSpielerMannschaften()
@@ -592,6 +587,3 @@ function getSpielerFromMannschaft($mannschaft)
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetchAll();
 }
-
-
-

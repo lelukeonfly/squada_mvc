@@ -23,14 +23,16 @@
         </div>
     </div>
 
-
-    <div>
-        <form action="" method="POST">
-            <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
-            <input type="number" name="geld" min="1" step="1" required>
-            <input type="submit" name="bieten" value="bieten">
-        </form>
-    </div>
+    <form class="row g-3" action="" method="POST">
+        <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
+        <div class="col-auto">
+          <label for="geld" class="visually-hidden">AMOUNT</label>
+          <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" name="bieten" class="btn btn-primary mb-3">BIETEN</button>
+        </div>
+    </form>
 
 
     <hr>
