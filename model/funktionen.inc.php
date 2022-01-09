@@ -538,39 +538,50 @@ function getAuktionLog($auktion_id)
 
 function generateLogTable($spieler_id)
 {
-?>
-    <table class="table table-striped">
+
+    foreach (getAuktionId($spieler_id) as $auktion_id) {
+        ?>
+        <table class="table table-striped">
         <thead>
-            <tr>
-                <th>TIME</th>
-                <th>AMOUNT IN $SQD</th>
-                <th>TEAM</th>
-            </tr>
+        <?php
+        $x = true;
+        foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+            if($x){
+            ?>
+            <?php
+                foreach ($logrow as $header=> $data) {
+                    ?>
+                    <th><?=ucfirst($header);?></th>
+                    <?php
+                    $x = false;
+                }
+            ?>
+            <?php
+            }
+        }
+        ?>
         </thead>
         <tbody>
-        <?php foreach (getAuktionId($spieler_id) as $auktion_id) { ?>
-                <?php
-                foreach (getAuktionLog($auktion_id['id']) as $rowname => $logrow) {
-                ?>
-                    <tr>
-                        <?php
-                        foreach ($logrow as $logdata) {
-                        ?>
-                            <td><?= $logdata; ?></td>
-                        <?php
-                        }
-                        ?>
-                    </tr>
-                <?php
-                }
-                ?>
         <?php
+        foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+            ?>
+            <tr>
+            <?php
+                foreach ($logrow as $logdata) {
+                    ?>
+                    <td><?=$logdata;?></td>
+                    <?php
+                }
+            ?>
+            </tr>
+            <?php
         }
         ?>
         </tbody>
-    </table>
-<?php
-}
+        </table>
+        <?php
+        }
+    }
 
 function getSpielerMannschaften()
 {
