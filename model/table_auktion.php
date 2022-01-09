@@ -1,49 +1,54 @@
-<?php
+<div class="container">
+    <div class="row">
+        <?php
         foreach (getSpielerMannschaften() as $mannschaft) {
-            ?>
-            <div>
-                <h1><?=$mannschaft['mannschaft'];?></h1>
-            <table>
-            <?php
-            $x = true;
-            foreach (getSpielerFromMannschaft($mannschaft['mannschaft']) as $player) {
-                if($x){
-                    ?>
-                    <thead class="text-center">
+        ?>
+            <div class="col-sm">
+                <h1 class="display-4"><?= $mannschaft['mannschaft']; ?></h1>
+                <table class="table">
                     <?php
-                    foreach ($player as $column_header => $value) {
-                        if (strcmp($column_header,"id")==0) {}else{
-                            ?>
-                            <th><?=ucfirst($column_header);?></th>
-                            <?php
-                            $x = false;
+                    $x = true;
+                    foreach (getSpielerFromMannschaft($mannschaft['mannschaft']) as $player) {
+                        if ($x) {
+                    ?>
+                            <thead>
+                                <?php
+                                foreach ($player as $column_header => $value) {
+                                    if (strcmp($column_header, "id") == 0) {
+                                    } else {
+                                ?>
+                                        <th><?= ucfirst($column_header); ?></th>
+                                    <?php
+                                        $x = false;
+                                    }
+                                    ?>
+                            </thead>
+                    <?php
+                                }
+                            }
                         }
-                        ?>
-                        </thead>
-                        <?php
-                    }
-                }
-            }
 
-            foreach (getSpielerFromMannschaft($mannschaft['mannschaft']) as $player) {
-                ?>
-                <tr class="clickable text-center" onclick="window.location='index.php?aktion=playerauktion&playerid=<?=$player['id'];?>'">
-                <?php
-                foreach ($player as $key => $detail) {
-                    if($key == "id")
-                    {}else{
+                        foreach (getSpielerFromMannschaft($mannschaft['mannschaft']) as $player) {
                     ?>
-                    <td><?=$detail;?></td>
-                    <?php
-                    }
-                }
-                ?>
-                </tr>
+                    <tr class="clickable" onclick="window.location='index.php?aktion=playerauktion&playerid=<?= $player['id']; ?>'">
+                        <?php
+                            foreach ($player as $key => $detail) {
+                                if ($key == "id") {
+                                } else {
+                        ?>
+                                <td><?= $detail; ?></td>
+                        <?php
+                                }
+                            }
+                        ?>
+                    </tr>
                 <?php
-            }
-            ?>
-            </table>
+                        }
+                ?>
+                </table>
+            </div>
+            <div class="w-100"></div>
+            <?php } ?>
         </div>
-            <?php
-        }
-    ?>
+        
+    </div>

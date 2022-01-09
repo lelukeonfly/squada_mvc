@@ -4,7 +4,7 @@ function get_db_connection()
         $host = "localhost";
         $user = "root";
         $pwd = "";
-        $schema = "auktion_testing";
+        $schema = "squada";
 
         try {
             $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
