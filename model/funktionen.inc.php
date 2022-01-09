@@ -491,12 +491,21 @@ function setNimmt_teil($array)
 }
 
 //holt id von aukton mit höchstem datum
-function getAuktionId($player_id)
+function getLatestAuktionId($player_id)
 {
     $db_connection = get_db_connection();
     $query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
+}
+//holt ids von auktion tabelle von spieler
+function getAuktionId($player_id)
+{
+    $db_connection = get_db_connection();
+    //$query = "SELECT auktion.id FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id";
+    $query = "SELECT auktion.id FROM auktion WHERE auktion.spieler_fk = $player_id";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
 }
 
 //gibt das höchste gebot einer auktion zurück
@@ -518,26 +527,33 @@ function getAuktionLog($auktion_id)
 
 function generateLogTable($spieler_id)
 {
-    //var_dump(getAuktionLog($spieler_id));
+    foreach (getAuktionId($spieler_id) as $auktion_id) {
     ?>
+    <table>
     <thead>
     <?php
-    foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+    $x = true;
+    //first foreach works
+    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+        if($x){
         ?>
         <?php
-            foreach ($logrow as $logdata => $data) {
+            foreach ($logrow as $header=> $data) {
                 ?>
-                <th><?=$logdata;?></th>
+                <th><?=ucfirst($header);?></th>
                 <?php
+                $x = false;
             }
         ?>
         <?php
+        }
     }
     ?>
     </thead>
     <tbody>
     <?php
-    foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+        //var_dump($logrow);
         ?>
         <tr>
         <?php
@@ -552,7 +568,9 @@ function generateLogTable($spieler_id)
     }
     ?>
     </tbody>
+    </table>
     <?php
+    }
 }
 
 function getSpielerMannschaften()
