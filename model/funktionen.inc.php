@@ -485,8 +485,11 @@ function setNimmt_teil($geld)
     $db_connection = get_db_connection();
     //$wann = time();
     $mannschaft_fk = $_SESSION['user'];
-    $auktion_fk = getLatestAuktionId($_POST['player']);
+    $auktion_fk = getLatestAuktionId($_POST['player'])['id'];
     $money = (int)$geld;
+    var_dump($mannschaft_fk);
+    var_dump($auktion_fk);
+    var_dump($money);
     //var_dump($money);
     $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, geld) VALUES ($mannschaft_fk,$auktion_fk,$money)";
     $db_connection->query($query);
@@ -496,7 +499,8 @@ function setNimmt_teil($geld)
 function getLatestAuktionId($player_id)
 {
     $db_connection = get_db_connection();
-    $query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
+    //$query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
+    $query = "SELECT auktion.id FROM auktion WHERE auktion.spieler_fk = $player_id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
