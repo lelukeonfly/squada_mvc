@@ -57,6 +57,7 @@
      * loads the specific side where aktion variable matches the filename
      */
     // SICHT
+    require 'model/DB_check.inc.php';
     require_once 'view/html_template/html_header.html';
     require_once 'view/' . $aktion . '.tpl.html';
     require_once 'view/html_template/html_footer.html';

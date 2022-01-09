@@ -9,23 +9,22 @@ function get_db_connection()
         try {
             $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $db;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        return $db;
     }
 
 
-function SETADMIN($username, $password){
+function DBcheck() {
+$db = get_db_connection();
 
-    $db_connection = get_db_connection();
-
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $query = "INSERT INTO mannschaft(id, name, loginname, passwort, guthaben) VALUES (NULL, '$username', 'ADMIN', '$hashed_password', -1)";
-    
-    $res = $db_connection->query($query, PDO::FETCH_ASSOC);
-
-
+    if ($db == true) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 function get_players(){
