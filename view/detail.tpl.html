@@ -10,7 +10,15 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Position: <?=get_player($_GET['playerid'])['position'];?></li>
                             <li class="list-group-item">Home team: <?=get_player($_GET['playerid'])['mannschaft'];?></li>
-                            <li class="list-group-item">Team: </li>
+                            <?php
+                                if(!empty(getTeamImage(get_player($_GET['playerid'])['originalemannschaft']))){
+                                ?>
+                                <li class="list-group-item">Team: <?=get_player($_GET['playerid'])['originalemannschaft'];?></li>
+                                <img src="<?=getTeamImage(get_player($_GET['playerid'])['originalemannschaft']);?>" alt="">
+                                <?php
+                            }
+                            ?>
+                            
                         </ul>
                     </div>
                 </div>

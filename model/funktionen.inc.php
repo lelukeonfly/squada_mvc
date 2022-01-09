@@ -4,7 +4,7 @@ function get_db_connection()
         $host = "localhost";
         $user = "root";
         $pwd = "";
-        $schema = "squada";
+        $schema = "auktion_testing";
 
         try {
             $db = new PDO('mysql:host='.$host.';dbname='.$schema.';port=3306',$user,$pwd);
@@ -38,9 +38,19 @@ function get_players(){
 function get_player($id)
 {
     $db_connection = get_db_connection();
-    $query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id LIKE $id";
+    //$query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id LIKE $id";
+    //$query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id";
+    $query = "SELECT spieler.name, spieler.position, spieler.mannschaft, mannschaft.name as originalemannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    return $statement->fetch();
+    $return = $statement->fetch();
+    if(isset($return['originalmannschaft'])){
+        return $return;
+    }else{
+        $query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id LIKE $id";
+        $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+        $return = $statement->fetch();
+        return $return;
+    }
 }
 
 //Loggt den Benutzer mit den Jeweiligen Username und dem Pwd ein
