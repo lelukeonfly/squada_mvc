@@ -509,27 +509,48 @@ function getHoechstesGebotOnAuction($auction_id)
 function getAuktionLog($auktion_id)
 {
     $db_connection = get_db_connection();
-    $query = "SELECT nimmt_teil.wann, nimmt_teil.geld, mannschaft.name FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
+    $query = "SELECT nimmt_teil.wann as kaufdatum, nimmt_teil.geld as preis, mannschaft.name as mannschaft FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetchAll();
 }
 
 function generateLogTable($spieler_id)
 {
-    var_dump(getAuktionLog($spieler_id));
-    #foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+    //var_dump(getAuktionLog($spieler_id));
+    ?>
+    <thead>
+    <?php
+    foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
         ?>
-    <!--    <tr>-->
         <?php
-            #foreach ($logrow as $logdata) {
+            foreach ($logrow as $logdata => $data) {
                 ?>
-                <!--<td>$logdata</td>-->
+                <th><?=$logdata;?></th>
                 <?php
-            #}
+            }
         ?>
-        <!--</tr>-->
         <?php
-    #}
+    }
+    ?>
+    </thead>
+    <tbody>
+    <?php
+    foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+        ?>
+        <tr>
+        <?php
+            foreach ($logrow as $logdata) {
+                ?>
+                <td><?=$logdata;?></td>
+                <?php
+            }
+        ?>
+        </tr>
+        <?php
+    }
+    ?>
+    </tbody>
+    <?php
 }
 
 function getSpielerMannschaften()
