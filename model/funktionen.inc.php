@@ -490,12 +490,21 @@ function setNimmt_teil($array)
 }
 
 //holt id von aukton mit höchstem datum
-function getAuktionId($player_id)
+function getLatestAuktionId($player_id)
 {
     $db_connection = get_db_connection();
     $query = "SELECT DISTINCT(auktion.id) FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id AND auktion.anfang = (SELECT MAX(auktion.anfang) FROM auktion WHERE auktion.spieler_fk = $player_id)";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
+}
+//holt ids von auktion tabelle von spieler
+function getAuktionId($player_id)
+{
+    $db_connection = get_db_connection();
+    //$query = "SELECT auktion.id FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE auktion.spieler_fk = $player_id";
+    $query = "SELECT auktion.id FROM auktion WHERE auktion.spieler_fk = $player_id";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
 }
 
 //gibt das höchste gebot einer auktion zurück
@@ -510,27 +519,57 @@ function getHoechstesGebotOnAuction($auction_id)
 function getAuktionLog($auktion_id)
 {
     $db_connection = get_db_connection();
-    $query = "SELECT nimmt_teil.wann, nimmt_teil.geld, mannschaft.name FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
+    $query = "SELECT nimmt_teil.wann as kaufdatum, nimmt_teil.geld as preis, mannschaft.name as mannschaft FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetchAll();
 }
 
 function generateLogTable($spieler_id)
 {
-    var_dump(getAuktionLog($spieler_id));
-    #foreach(getAuktionLog($spieler_id) as $rowname => $logrow){
+    foreach (getAuktionId($spieler_id) as $auktion_id) {
+    ?>
+    <table>
+    <thead>
+    <?php
+    $x = true;
+    //first foreach works
+    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+        if($x){
         ?>
-    <!--    <tr>-->
         <?php
-            #foreach ($logrow as $logdata) {
+            foreach ($logrow as $header=> $data) {
                 ?>
-                <!--<td>$logdata</td>-->
+                <th><?=ucfirst($header);?></th>
                 <?php
-            #}
+                $x = false;
+            }
         ?>
-        <!--</tr>-->
         <?php
-    #}
+        }
+    }
+    ?>
+    </thead>
+    <tbody>
+    <?php
+    foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
+        //var_dump($logrow);
+        ?>
+        <tr>
+        <?php
+            foreach ($logrow as $logdata) {
+                ?>
+                <td><?=$logdata;?></td>
+                <?php
+            }
+        ?>
+        </tr>
+        <?php
+    }
+    ?>
+    </tbody>
+    </table>
+    <?php
+    }
 }
 
 function getSpielerMannschaften()
