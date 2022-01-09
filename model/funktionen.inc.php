@@ -205,6 +205,7 @@ function getTeuerstenPlayer() {
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $spieler = $statement->fetch();
 
+}
 
 //Auf dem Dashboard wird je nach aktueller Zeit, "Good morning" oder "Good afternoon" angezeigt, dies wird mit der date() funktion in php überprüft
 function getTimeState() {
@@ -239,9 +240,6 @@ function seeOfferedPlayers($id){
 #    return $offers;
 #}
 
-function seeOfferedPlayers($mannschaft_id)
-{
-}
 
 //Vergleicht zwei Passwörter in ungehashter ansicht
 function comparePassword($password1, $password2) {
