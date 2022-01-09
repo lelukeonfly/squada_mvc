@@ -40,16 +40,20 @@ function get_player($id)
     $db_connection = get_db_connection();
     //$query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id LIKE $id";
     //$query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id";
-    $query = "SELECT spieler.name, spieler.position, spieler.mannschaft, mannschaft.name as originalemannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id ORDER BY auktion.anfang DESC LIMIT 1";
+    $query = "SELECT spieler.name, spieler.position, spieler.mannschaft, mannschaft.name as originalmannschaft FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON nimmt_teil.auktion_fk = auktion.id JOIN mannschaft ON mannschaft.id = nimmt_teil.mannschaft_fk WHERE spieler.id = $id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $return = $statement->fetch();
     if(isset($return['originalmannschaft'])){
         return $return;
     }else{
-        $query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id LIKE $id";
+        $query = "SELECT spieler.name, spieler.position, spieler.mannschaft FROM spieler WHERE spieler.id = $id LIMIT 1";
         $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
         $return = $statement->fetch();
-        return $return;
+        $spielerdata['name'] = $return['name'];
+        $spielerdata['position'] = $return['position'];
+        $spielerdata['mannschaft'] = $return['mannschaft'];
+        $spielerdata['originalmannschaft'] = "-";
+        return $spielerdata;
     }
 }
 
