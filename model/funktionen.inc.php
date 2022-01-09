@@ -270,9 +270,6 @@ function seeOfferedPlayers($id){
 #    return $offers;
 #}
 
-// function seeOfferedPlayers($mannschaft_id)
-// {
-// }
 
 //Vergleicht zwei Passwörter in ungehashter ansicht
 function comparePassword($password1, $password2) {
@@ -502,7 +499,6 @@ function getAuktionLog($auktion_id)
     return $statement->fetchAll();
 }
 
-/*
 function generateLogTable($spieler_id)
 {
     var_dump(getAuktionLog($spieler_id));
@@ -521,5 +517,21 @@ function generateLogTable($spieler_id)
     #}
 }
 
+function getSpielerMannschaften()
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT DISTINCT(spieler.mannschaft) FROM spieler";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
+}
 
-*/
+function getSpielerFromMannschaft($mannschaft)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT spieler.id, spieler.name, spieler.position FROM spieler WHERE spieler.mannschaft = '$mannschaft'";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetchAll();
+}
+
+
+
