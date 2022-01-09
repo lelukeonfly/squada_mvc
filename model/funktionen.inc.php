@@ -519,6 +519,25 @@ function setNimmt_teil($geld)
     $money = (int)$geld;
     $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, geld) VALUES ($mannschaft_fk,$auktion_fk,$money)";
     $db_connection->query($query);
+
+
+}
+
+function getMoney()
+{
+    $db_connection = get_db_connection();
+    $mannschaft_fk = $_SESSION['user'];
+    $query = "SELECT mannschaft.guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft_fk";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
+}
+
+function updateMoney($setmoney)
+{
+    $db_connection = get_db_connection();
+    $mannschaft_fk = $_SESSION['user'];
+    $query = "UPDATE mannschaft SET guthaben=$setmoney WHERE mannschaft.id = $mannschaft_fk";
+    $db_connection->query($query);
 }
 
 //holt id von aukton mit höchstem datum
@@ -633,9 +652,9 @@ function checkmoney($geld){
     $query = "SELECT guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $return = $statement->fetch();
+        //var_dump($geld);
+        //var_dump($return);
     if ($return['guthaben']>=$geld) {
-        var_dump($geld);
-        var_dump($return);
         return true;
     }else {
         return false;
