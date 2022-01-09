@@ -36,22 +36,27 @@
                 <div class="row">
                     <?php foreach ($rss->channel->item as $item) if ($i++ <= 6) { ?>
                         <div class="col-md-4">
-                            <h2><a href="<?= $item->link ?>">
-                                    <?= $item->title ?>
-                                </a></h2>
-                            <p>
-                                <?= $item->description ?>
-                            </p>
+                            <?php $attrs = $item->children("atom", true)->link->attributes(); ?>
+                            <div class="card-group">
+                                <div class="card">
+                                    <a href="<?= $item->link ?>"><img class="card-img-top" src="<?=$attrs['href']?>" alt="<?= $item->title ?>"></a>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= $item->title ?></h5>
+                                        <p class="card-text"><?= $item->description ?></p>
+                                        <p class="card-text"><small class="text-muted"><?=$item->pubDate ?></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>&nbsp;</p>
+                        </div>
+                        <?php }  ?>
                         </div>
 
-                    <?php } ?>
                 </div>
+                <h1 class="display-4">Costliest player</h1>
+                <?php $player = getTeuerstenPlayer(); ?>
 
-            </div>
-            <h1 class="display-4">Costliest player</h1>
-            <?php $player = getTeuerstenPlayer(); ?>
-
-            <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="<?= getPlayerImage($player['name']) ?>" alt="Playerimage of <?= $player['Name'] ?>">
                         <div class="card-body">
@@ -65,6 +70,6 @@
                         </div>
                     </div>
 
+                </div>
             </div>
         </div>
-    </div>
