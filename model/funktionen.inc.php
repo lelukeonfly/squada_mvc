@@ -533,7 +533,6 @@ function generateLogTable($spieler_id)
     <thead>
     <?php
     $x = true;
-    //first foreach works
     foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
         if($x){
         ?>
@@ -553,7 +552,6 @@ function generateLogTable($spieler_id)
     <tbody>
     <?php
     foreach(getAuktionLog($auktion_id['id']) as $rowname => $logrow){
-        //var_dump($logrow);
         ?>
         <tr>
         <?php
