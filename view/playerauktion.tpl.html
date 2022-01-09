@@ -48,16 +48,31 @@
     <div>
         <h1>Auktion Status:</h1>
         <?php
-        extract(getAuktionDetails(getLatestAuktionId($_GET['playerid'])));
+        //var_dump(getAuktionDetails(getLatestAuktionId($_GET['playerid'])));
+        //extract(getAuktionDetails(getLatestAuktionId($_GET['playerid'])));
+        $latestAuktion = getLatestAuktionId($_GET['playerid']);
+        if (!empty($latestAuktion)) {
+        $auktionDetails = getAuktionDetails($latestAuktion['id']);
+        $anfang = $auktionDetails['anfang'];
+        $dauer = $auktionDetails['dauer'];
+        $vertragszeit = $auktionDetails['vertragszeit'];
         $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
         $vertragsende = date('Y-m-d H:i:s', strtotime("$bis + $vertragszeit Seconds"));
+        //60*60*24
         $vertragsdauerindays = $vertragszeit/86400;
         ?>
+        <!--error detected: will not reload on new players unless they have vertrag-->
         <p>Anfang Auktion: <?=$anfang;?></p>
         <p>Ende Auktion und Start Vertrag: <?=$bis;?></p>
         <p>Ende Vertrag: <?=$vertragsende;?></p>
         <p>Vertragszeit in Tagen: <?=$vertragsdauerindays;?></p>
-
+        <?php
+        }else {
+        ?>
+        <p>Keine Auktion vorhanden</p>
+        <?php
+        }
+        ?>
 
         <h1>Vertrag Status:</h1>
         <?php

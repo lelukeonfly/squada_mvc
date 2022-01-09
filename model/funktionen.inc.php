@@ -446,7 +446,7 @@ function getTimestampVorVertrag($spieler_id)
 {
     $db_connection = get_db_connection();
 
-    $query = "SELECT anfang, dauer FROM auktion WHERE spieler_fk = $spieler_id ORDER BY auktion.anfang DESC LIMIT 1";
+    $query = "SELECT auktion.anfang, auktion.dauer FROM auktion WHERE spieler_fk = $spieler_id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $daten = $statement->fetch();
 
@@ -512,7 +512,7 @@ function setAuktion($spieler)
 function setNimmt_teil($geld)
 {
     $db_connection = get_db_connection();
-    if (time()< strtotime(getTimestampVorVertrag($player_id))) {
+    if (time()< strtotime(getTimestampVorVertrag($_POST['player']))) {
     }
     $mannschaft_fk = $_SESSION['user'];
     $auktion_fk = (int)getLatestAuktionId($_POST['player'])['id'];
@@ -622,7 +622,22 @@ function getSpielerFromMannschaft($mannschaft)
 
 function getAuktionDetails($auktion_id){
     $db_connection = get_db_connection();
-    $query = "SELECT auktion.anfang, auktion.dauer, auktion.vertragszeit FROM auktion ORDER BY auktion.anfang DESC LIMIT 1";
+    $query = "SELECT auktion.anfang, auktion.dauer, auktion.vertragszeit FROM auktion WHERE auktion.id = $auktion_id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
+}
+
+function checkmoney($geld){
+    $db_connection = get_db_connection();
+    $mannschaft = $_SESSION['user'];
+    $query = "SELECT guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $return = $statement->fetch();
+    if ($return['guthaben']>=$geld) {
+        var_dump($geld);
+        var_dump($return);
+        return true;
+    }else {
+        return false;
+    }
 }
