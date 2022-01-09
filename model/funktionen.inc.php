@@ -652,8 +652,6 @@ function checkmoney($geld){
     $query = "SELECT guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $return = $statement->fetch();
-        //var_dump($geld);
-        //var_dump($return);
     if ($return['guthaben']>=$geld) {
         return true;
     }else {
