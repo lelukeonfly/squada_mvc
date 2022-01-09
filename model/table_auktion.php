@@ -12,6 +12,7 @@
                         if ($x) {
                     ?>
                             <thead>
+                            
                                 <?php
                                 foreach ($player as $column_header => $value) {
                                     if (strcmp($column_header, "id") == 0) {
@@ -46,6 +47,7 @@
                         }
                 ?>
                 </table>
+                
             </div>
             
             <?php } ?>
