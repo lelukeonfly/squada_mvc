@@ -30,9 +30,29 @@
           <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
         </div>
         <div class="col-auto">
-            <button type="submit" name="bieten" class="btn btn-primary mb-3">BIETEN</button>
+            <?php
+/*             var_dump(date("Y-m-d H:i:s",time()));
+            echo "nach spieler vertrag:";
+            var_dump((getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid'])));
+            echo "vor spieler vertrag:";
+            var_dump((getTimestampVorVertrag($_GET['playerid']))); */
+            //Wenn jetztzeit größer als zeit ist wenn spiler nicht mehr unter vertrag ist oder vor dem vertrag dann ist button clickbar
+            if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))) {
+                ?>
+                <button type="submit" name="bieten" class="btn btn-primary mb-3">BIETEN</button>
+                <?php
+            }else{
+            ?>
+            <button type="submit" name="bieten" class="btn btn-primary mb-3" DISABLED>BIETEN</button>
+            <?php
+            }
+            ?>
         </div>
     </form>
+
+    <div>
+        Status: Unter Vertrag... <- php
+    </div>
 
 
     <hr>

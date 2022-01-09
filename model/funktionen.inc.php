@@ -427,14 +427,38 @@ function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
 {
     $db_connection = get_db_connection();
 
-    $query = "SELECT anfang, dauer, vertragszeit FROM auktion WHERE spieler_fk = $spielerId";
+    $query = "SELECT anfang, dauer, vertragszeit FROM auktion WHERE spieler_fk = $spielerId ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $daten = $statement->fetch();
+
+    if (empty($daten)) {
+        
+    }else{
     extract($daten);
 
     //Funktion strtotime werden Sekunden zum Anfang addiert
     $out = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds"));
     return $out;
+    }
+}
+
+function getTimestampVorVertrag($spieler_id)
+{
+    $db_connection = get_db_connection();
+
+    $query = "SELECT anfang, dauer FROM auktion WHERE spieler_fk = $spieler_id";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $daten = $statement->fetch();
+
+    if (empty($daten)) {
+        
+    }else{
+    extract($daten);
+
+    //Funktion strtotime werden Sekunden zum Anfang addiert
+    $out = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
+    return $out;
+    }
 }
 
 //gibt spieler welche nicht in vertrag sind aus
@@ -488,14 +512,11 @@ function setAuktion($spieler)
 function setNimmt_teil($geld)
 {
     $db_connection = get_db_connection();
-    //$wann = time();
+    if (time()< strtotime(getTimestampVorVertrag($player_id))) {
+    }
     $mannschaft_fk = $_SESSION['user'];
-    $auktion_fk = getLatestAuktionId($_POST['player'])['id'];
+    $auktion_fk = (int)getLatestAuktionId($_POST['player'])['id'];
     $money = (int)$geld;
-    // var_dump($mannschaft_fk);
-    // var_dump($auktion_fk);
-    // var_dump($money);
-    //var_dump($money);
     $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, geld) VALUES ($mannschaft_fk,$auktion_fk,$money)";
     $db_connection->query($query);
 }
