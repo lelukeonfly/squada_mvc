@@ -235,7 +235,8 @@ function getTeuerstenPlayer() {
 
     $db_connection = get_db_connection();
 
-    $query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
+    #$query = "SELECT MAX(ba.preis), s.name FROM bietet_auf ba JOIN spieler s ON s.id = ba.spieler_fk JOIN mannschaft m  ON m.id = ba.mannschaft_fk";
+    $query = "SELECT spieler.name, spieler.position, spieler.mannschaft, nimmt_teil.geld FROM spieler JOIN auktion ON spieler.id = auktion.spieler_fk JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk WHERE nimmt_teil.geld = (SELECT MAX(nimmt_teil.geld) FROM nimmt_teil)";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $spieler = $statement->fetch();
