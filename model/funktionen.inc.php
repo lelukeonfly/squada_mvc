@@ -446,7 +446,7 @@ function getTimestampVorVertrag($spieler_id)
 {
     $db_connection = get_db_connection();
 
-    $query = "SELECT anfang, dauer FROM auktion WHERE spieler_fk = $spieler_id";
+    $query = "SELECT anfang, dauer FROM auktion WHERE spieler_fk = $spieler_id ORDER BY auktion.anfang DESC LIMIT 1";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $daten = $statement->fetch();
 
@@ -499,7 +499,7 @@ function getPlayersNotInVertrag()
 function setAuktion($spieler)
 {
     $db_connection = get_db_connection();
-    if (time() > getTimestampWhenSpielerNichtMehrUnterVertragIst($spieler)) {
+    if (time() > strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($spieler))) {
         $query = "INSERT INTO auktion(spieler_fk) VALUES ('$spieler')";
         $db_connection->query($query);
     }
@@ -618,4 +618,11 @@ function getSpielerFromMannschaft($mannschaft)
     $query = "SELECT spieler.id, spieler.name, spieler.position FROM spieler WHERE spieler.mannschaft = '$mannschaft'";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetchAll();
+}
+
+function getAuktionDetails($auktion_id){
+    $db_connection = get_db_connection();
+    $query = "SELECT auktion.anfang, auktion.dauer, auktion.vertragszeit FROM auktion ORDER BY auktion.anfang DESC LIMIT 1";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
 }

@@ -31,11 +31,6 @@
         </div>
         <div class="col-auto">
             <?php
-/*             var_dump(date("Y-m-d H:i:s",time()));
-            echo "nach spieler vertrag:";
-            var_dump((getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid'])));
-            echo "vor spieler vertrag:";
-            var_dump((getTimestampVorVertrag($_GET['playerid']))); */
             //Wenn jetztzeit größer als zeit ist wenn spiler nicht mehr unter vertrag ist oder vor dem vertrag dann ist button clickbar
             if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))) {
                 ?>
@@ -51,7 +46,27 @@
     </form>
 
     <div>
-        Status: Unter Vertrag... <- php
+        <h1>Auktion Status:</h1>
+        <?php
+        extract(getAuktionDetails(getLatestAuktionId($_GET['playerid'])));
+        $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
+        $vertragsende = date('Y-m-d H:i:s', strtotime("$bis + $vertragszeit Seconds"));
+        $vertragsdauerindays = $vertragszeit/86400;
+        ?>
+        <p>Anfang Auktion: <?=$anfang;?></p>
+        <p>Ende Auktion und Start Vertrag: <?=$bis;?></p>
+        <p>Ende Vertrag: <?=$vertragsende;?></p>
+        <p>Vertragszeit in Tagen: <?=$vertragsdauerindays;?></p>
+
+
+        <h1>Vertrag Status:</h1>
+        <?php
+        if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))) {
+            echo "Nicht unter Vertrag";
+        }else{
+            echo "Unter Vertrag";
+        }
+        ?>
     </div>
 
 
