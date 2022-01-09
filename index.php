@@ -42,6 +42,8 @@
             break;
         case 'auktion':
             break;
+        case 'playerauktion':
+            break;
     }
     
     /**
