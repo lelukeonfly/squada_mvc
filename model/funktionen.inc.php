@@ -467,25 +467,28 @@ function getPlayersNotInVertrag()
  * Funktion für insert into auktion tabelle
  */
 
-function setAuktion($array)
+function setAuktion($spieler)
 {
-    extract($array);
-
     $db_connection = get_db_connection();
-    $query = "INSERT INTO auktion(anfang, dauer, spieler_fk, vertragszeit) VALUES ('$anfang','$dauer','$spieler_fk','$vertragszeit')";
-    $db_connection->query($query);
+    if(time()>getTimestampWhenSpielerNichtMehrUnterVertragIst($spieler)){
+        $query = "INSERT INTO auktion(spieler_fk) VALUES ('$spieler')";
+        $db_connection->query($query);
+    }
 }
 
 
 /**
  * Funktion für insert into nimmt_teil tabelle
  */
-function setNimmt_teil($array)
+function setNimmt_teil($geld)
 {
-    extract($array);
-
     $db_connection = get_db_connection();
-    $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, wann, geld) VALUES ('$mannschaft_fk','$auktion_fk','$wann','$geld')";
+    //$wann = time();
+    $mannschaft_fk = $_SESSION['user'];
+    $auktion_fk = getLatestAuktionId($_POST['player']);
+    $money = (int)$geld;
+    //var_dump($money);
+    $query = "INSERT INTO nimmt_teil(mannschaft_fk, auktion_fk, geld) VALUES ($mannschaft_fk,$auktion_fk,$money)";
     $db_connection->query($query);
 }
 

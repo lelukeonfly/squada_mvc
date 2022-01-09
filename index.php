@@ -48,6 +48,10 @@
         case 'auktion':
             break;
         case 'playerauktion':
+            if(isset($_POST['bieten'])){
+                setAuktion($_POST['player']);
+                setNimmt_teil($_POST['geld']);
+            }
             break;
     }
     

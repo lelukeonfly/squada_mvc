@@ -26,8 +26,9 @@
 
     <div>
         <form action="" method="POST">
-            <input type="number" min="1" step="1" required>
-            <input type="submit" value="bieten">
+            <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
+            <input type="number" name="geld" min="1" step="1" required>
+            <input type="submit" name="bieten" value="bieten">
         </form>
     </div>
 
