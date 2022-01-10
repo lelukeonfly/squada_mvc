@@ -11,7 +11,7 @@
         $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
         $vertragsende = date('Y-m-d H:i:s', strtotime("$bis + $vertragszeit Seconds"));
         //60*60*24
-        $vertragsdauerindays = $vertragszeit/86400;
+        $vertragsdauerindays = secondsToTime($vertragszeit);
         ?>
         <!--error detected: will not reload on new players unless they have vertrag-->
         <table class="table table-striped">
@@ -47,7 +47,7 @@
             </tr>
             <tr>
                 <td>
-                    Contracct time in days
+                    Contracct time
                 </td>
                 <td>
                     <?=$vertragsdauerindays;?>
