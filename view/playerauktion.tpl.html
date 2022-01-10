@@ -16,7 +16,7 @@
                                 alt="Team Image" width="25%"></li>
                         <li class="list-group-item">Team:
                             <?php
-                                if(time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))){
+                                if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
                                     ?><?=get_player($_GET['playerid'])['originalmannschaft'];?>
                                     <?php
                                 }else{
