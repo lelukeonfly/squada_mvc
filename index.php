@@ -35,10 +35,6 @@
             //get Results from Form and Update
             $update = ResultchangeUsersettings();
             break;
-        //case 'spieler':
-            //break;
-        //case 'detail':
-            //break;
         case 'register':
             $res = ResultchangeCreateMannschaft();
             break;
