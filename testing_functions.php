@@ -165,26 +165,10 @@ echo "</textarea>";
 echo "</div>";
 
 echo "<div>";
-echo "success";
-nl();
-echo "<textarea>";
-var_dump(success());
-echo "</textarea>";
-echo "</div>";
-
-echo "<div>";
 echo "getTimestampWhenSpielerNichtMehrUnterVertragIst";
 nl();
 echo "<textarea>";
 var_dump(getTimestampWhenSpielerNichtMehrUnterVertragIst(3));
-echo "</textarea>";
-echo "</div>";
-
-echo "<div>";
-echo "getPlayersNotInVertrag";
-nl();
-echo "<textarea>";
-var_dump(getPlayersNotInVertrag());
 echo "</textarea>";
 echo "</div>";
 
@@ -211,6 +195,15 @@ echo "<textarea>";
 var_dump(getAuktionLog(2));
 echo "</textarea>";
 echo "</div>";
+
+echo "<div>";
+echo "giveBackMoney";
+nl();
+echo "<textarea>";
+var_dump(giveBackMoney(2));
+echo "</textarea>";
+echo "</div>";
+
 ?> 
 </body>
 </html>

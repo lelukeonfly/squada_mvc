@@ -356,9 +356,27 @@ function bieten()
                 setAuktion($_POST['player']);
                 setNimmt_teil($_POST['geld']);
                 updateMoney(getmoney()['guthaben']-(int)$_POST['geld']);
+                giveBackMoney();
             }else {
 
             }
+}
+
+
+function giveBackMoney()
+{
+    $auktion_fk = (int)getLatestAuktionId($_POST['player'])['id'];
+    $db_connection = get_db_connection();
+    $query = "SELECT nimmt_teil.mannschaft_fk, nimmt_teil.wann, nimmt_teil.geld FROM mannschaft JOIN nimmt_teil ON mannschaft.id = nimmt_teil.mannschaft_fk JOIN auktion ON nimmt_teil.auktion_fk = auktion.id WHERE auktion.id = $auktion_fk ORDER BY nimmt_teil.wann DESC LIMIT 2;";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $return = $statement->fetchAll();
+    if (!empty($return[1])) {
+        $data = $return[1];
+        var_dump($auktion_fk);
+        var_dump($data);
+        $geld = getMoneyOfMannschaft($data['mannschaft_fk'])['guthaben'];
+        updateMoney($geld+(int)$data['geld']);
+    }
 }
 
 /**
@@ -537,6 +555,15 @@ function getMoney()
     $db_connection = get_db_connection();
     $mannschaft_fk = $_SESSION['user'];
     $query = "SELECT mannschaft.guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft_fk";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
+}
+
+function getMoneyOfMannschaft($mannschaft)
+{   
+    $db_connection = get_db_connection();
+    $mannschaft_fk = $_SESSION['user'];
+    $query = "SELECT mannschaft.guthaben FROM mannschaft WHERE mannschaft.id = $mannschaft";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     return $statement->fetch();
 }
