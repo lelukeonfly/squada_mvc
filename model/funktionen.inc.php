@@ -354,6 +354,14 @@ function setGuthaben($id)
 
 function bieten()
 {
+    if(isset($_POST['bieten']) && checkmoney($_POST['geld'])){
+            //var_dump(checkmoney($_POST['geld']));
+                setAuktion($_POST['player']);
+                setNimmt_teil($_POST['geld']);
+                updateMoney(getmoney()['guthaben']-(int)$_POST['geld']);
+            }else {
+
+            }
 }
 
 /**
