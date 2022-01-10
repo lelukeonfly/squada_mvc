@@ -262,7 +262,7 @@ function seeOfferedPlayers($id)
     JOIN mannschaft m ON m.id = nt.mannschaft_fk
     JOIN auktion a ON nt.auktion_fk = a.id
     JOIN spieler s ON a.spieler_fk = s.id
-    WHERE m.id = 1";
+    WHERE m.id = $id";
 
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
     $offers = $statement->fetchAll();
@@ -466,35 +466,35 @@ function getTimestampVorVertrag($spieler_id)
 }
 
 //gibt spieler welche nicht in vertrag sind aus
-function getPlayersNotInVertrag()
-{
-    $db_connection = get_db_connection();
-    $query = "SELECT spieler.id, spieler.name, auktion.anfang, auktion.dauer, auktion.vertragszeit FROM spieler LEFT JOIN auktion ON spieler.id = auktion.spieler_fk";
-    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    $data = $statement->fetchAll();
+#function getPlayersNotInVertrag()
+#{
+#    $db_connection = get_db_connection();
+#    $query = "SELECT spieler.id, spieler.name, auktion.anfang, auktion.dauer, auktion.vertragszeit FROM spieler LEFT JOIN auktion ON spieler.id = auktion.spieler_fk";
+#    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+#    $data = $statement->fetchAll();
 
     //neues array für return (sammlung von player)
-    $playerArray = array();
+#    $playerArray = array();
     //loop durch jeden player
-    foreach ($data as $player) {
+#    foreach ($data as $player) {
         //neues array für einzelnen player
-        $one = array();
-        extract($player);
+#        $one = array();
+#        extract($player);
         //zeit nach vertrag ende -> add(anfang+dauer+vertragszeit)
-        $endtime = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
+#        $endtime = strtotime("$anfang + $dauer Seconds + $vertragszeit Seconds");
         //zeit vor vertrag -> add(anfang+dauer)
-        $vorvertragtime = strtotime("$anfang + $dauer Seconds");
-        if (time() > $endtime || time() < $vorvertragtime) {
-            $one['id'] = $id;
-            $one['name'] = $name;
-            $one['anfang'] = $dauer;
-            $one['vertragszeit'] = $vertragszeit;
-            $playerArray[] = $player;
-        }
-    }
-
-    return $playerArray;
-}
+#        $vorvertragtime = strtotime("$anfang + $dauer Seconds");
+#        if (time() > $endtime || time() < $vorvertragtime) {
+#            $one['id'] = $id;
+#            $one['name'] = $name;
+#            $one['anfang'] = $dauer;
+#            $one['vertragszeit'] = $vertragszeit;
+#            $playerArray[] = $player;
+#        }
+#    }
+#
+#    return $playerArray;
+#}
 
 /**
  * Funktion für insert into auktion tabelle
