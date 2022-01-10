@@ -620,3 +620,12 @@ function checkmoney($geld){
         return false;
     }
 }
+
+function isAuktion($spieler)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT anfang FROM auktion WHERE spieler_fk = $spieler ORDER BY anfang DESC LIMIT 1";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    $return = $statement->fetch();
+    
+}
