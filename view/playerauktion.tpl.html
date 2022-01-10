@@ -23,6 +23,9 @@
         </div>
     </div>
 
+    <?php
+    if(is_logged_in()){
+    ?>
     <form class="row g-3" action="" method="POST">
         <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
         <div class="col-auto">
@@ -44,6 +47,9 @@
             ?>
         </div>
     </form>
+    <?php
+    }
+    ?>
 
     <div>
         <h1>Auktion Status:</h1>
