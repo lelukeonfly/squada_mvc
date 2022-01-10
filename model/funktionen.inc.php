@@ -363,6 +363,7 @@ function bieten()
 }
 
 
+//takes second offer on player and gives its money back so when new offer is set last offer gets money back
 function giveBackMoney()
 {
     $auktion_fk = (int)getLatestAuktionId($_POST['player'])['id'];
@@ -372,10 +373,11 @@ function giveBackMoney()
     $return = $statement->fetchAll();
     if (!empty($return[1])) {
         $data = $return[1];
-        var_dump($auktion_fk);
-        var_dump($data);
+        //var_dump($auktion_fk);
+        //var_dump($data);
         $geld = getMoneyOfMannschaft($data['mannschaft_fk'])['guthaben'];
-        updateMoney($geld+(int)$data['geld']);
+        //var_dump($geld);
+        updateMoneyOfMannschaft($data['mannschaft_fk'],(int)$geld+(int)$data['geld']);
     }
 }
 
@@ -574,6 +576,13 @@ function updateMoney($setmoney)
     $db_connection = get_db_connection();
     $mannschaft_fk = $_SESSION['user'];
     $query = "UPDATE mannschaft SET guthaben=$setmoney WHERE mannschaft.id = $mannschaft_fk";
+    $db_connection->query($query);
+}
+
+function updateMoneyOfMannschaft($mannschaft, $setmoney)
+{
+    $db_connection = get_db_connection();
+    $query = "UPDATE mannschaft SET guthaben=$setmoney WHERE mannschaft.id = $mannschaft";
     $db_connection->query($query);
 }
 
