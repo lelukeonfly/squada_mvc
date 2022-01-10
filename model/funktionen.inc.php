@@ -348,6 +348,7 @@ function ResultchangeUsersettings()
     }
 }
 
+//überprüft ob bieten button geklickt wurde und überprüft ob genügend guthaben vorhanden ist um an der auktion teilzunehmen
 function bieten()
 {
     if(isset($_POST['bieten']) && checkmoney($_POST['geld'])){
@@ -417,10 +418,10 @@ function getLogoURL()
     return $_SERVER['DOCUMENT_ROOT'] . "/view/img/LOGO.png";
 }
 
-function success()
-{
-    return isset($login) && $login == false; // <-- Does not work
-}
+#function success()
+#{
+#    return isset($login) && $login == false; // <-- Does not work
+#}
 
 
 /**
@@ -446,6 +447,7 @@ function getTimestampWhenSpielerNichtMehrUnterVertragIst($spielerId)
     }
 }
 
+//holt den timestamp als string sobald die auktion fertig ist und sobald der Vertrag anfängt
 function getTimestampVorVertrag($spieler_id)
 {
     $db_connection = get_db_connection();
@@ -465,6 +467,8 @@ function getTimestampVorVertrag($spieler_id)
     }
 }
 
+//nicht mehr gebraucht
+//war für dynamische log version gedacht (veraltet)
 //gibt spieler welche nicht in vertrag sind aus
 #function getPlayersNotInVertrag()
 #{
@@ -527,6 +531,7 @@ function setNimmt_teil($geld)
 
 }
 
+//holt das Guthaben einer Mannschaft her
 function getMoney()
 {
     $db_connection = get_db_connection();
@@ -536,6 +541,7 @@ function getMoney()
     return $statement->fetch();
 }
 
+//ändert das geld einer mannschaft in mannschaft TAbelle
 function updateMoney($setmoney)
 {
     $db_connection = get_db_connection();
@@ -572,6 +578,7 @@ function getHoechstesGebotOnAuction($auction_id)
     return $statement->fetch();
 }
 
+//holt den log aus mehreren Tabellen heraus (nimmt_teil, auktion und mannschaft)
 function getAuktionLog($auktion_id)
 {
     $db_connection = get_db_connection();
@@ -580,11 +587,13 @@ function getAuktionLog($auktion_id)
     return $statement->fetchAll();
 }
 
+//ruft file zum generieren des auktionslogs auf
 function generateLogTable($spieler_id)
 {
     require_once "model/tables_auktionlog.php";    
 }
 
+//holt die namen aller existierenden Standardmannschaften
 function getSpielerMannschaften()
 {
     $db_connection = get_db_connection();
@@ -593,6 +602,7 @@ function getSpielerMannschaften()
     return $statement->fetchAll();
 }
 
+//holt die spieler einer Standardmannschaft heraus (nicht die mannschaft welche kauft)
 function getSpielerFromMannschaft($mannschaft)
 {
     $db_connection = get_db_connection();
@@ -601,6 +611,7 @@ function getSpielerFromMannschaft($mannschaft)
     return $statement->fetchAll();
 }
 
+//holt die details von der Tabelle auktion mit auktion id heraus
 function getAuktionDetails($auktion_id){
     $db_connection = get_db_connection();
     $query = "SELECT auktion.anfang, auktion.dauer, auktion.vertragszeit FROM auktion WHERE auktion.id = $auktion_id ORDER BY auktion.anfang DESC LIMIT 1";
@@ -608,6 +619,7 @@ function getAuktionDetails($auktion_id){
     return $statement->fetch();
 }
 
+//überprüft ob spieler genügend guthaben auf Konto vorhanden hat
 function checkmoney($geld){
     $db_connection = get_db_connection();
     $mannschaft = $_SESSION['user'];
@@ -621,6 +633,7 @@ function checkmoney($geld){
     }
 }
 
+//in work
 function isAuktion($spieler)
 {
     $db_connection = get_db_connection();
