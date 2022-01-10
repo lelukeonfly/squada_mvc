@@ -9,7 +9,7 @@ toggle between hiding and showing the dropdown content */
       var input, filter, ul, li, a, i;
       input = document.getElementById("InputSearch");
       filter = input.value.toUpperCase();
-      div = document.getElementById("myDropdown");
+      div = document.getElementById("search");
       a = div.getElementsByTagName("a");
       for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
@@ -22,9 +22,9 @@ toggle between hiding and showing the dropdown content */
     }
   </script>
 
-  <div class="dropdown">
+  <div class="dropdown" id="search">
     <input type="text" class="form-control" id="InputSearch" placeholder="Search.." onkeyup="filterFunction()">
-    <div id="myDropdown" class="dropdown-content">
+    <div class="dropdown-content">
       <?php foreach (get_players() as $player) { ?>
         <a class="dropdown-item" href="index.php?aktion=playerauktion&playerid=<?= $player['id']; ?>">
           <?= $player['name']; ?>

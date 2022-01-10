@@ -26,9 +26,9 @@
                                 Price: <?= $value['geld'] ?><br />
                                 Position: <?= $value['position'] ?><br />
                                 House Team: <?= $value['mannschaft'] ?> <br />
-                                How long: <?= $value['vertragszeit']/86400 ?> Days<br />
+                                How long: <?= secondsToTime($value['vertragszeit']) ?> Days<br />
                             </p>
-                            <a href="index.php?aktion=detail&playerid=<?=$value['id']?>" class="btn btn-primary">View auction</a>
+                            <a href="index.php?aktion=playerauktion&playerid=<?=$value['id']?>" class="btn btn-primary">View auction</a>
                         </div>
                     </div>
                 <?php } ?>
