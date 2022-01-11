@@ -6,6 +6,7 @@
         if (!empty($latestAuktion)) {
         $auktionDetails = getAuktionDetails($latestAuktion['id']);
         $anfang = $auktionDetails['anfang'];
+        $anfang = date("Y-m-d H:i:s", strtotime("$anfang + 6 Hours"));
         $dauer = $auktionDetails['dauer'];
         $vertragszeit = $auktionDetails['vertragszeit'];
         $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
