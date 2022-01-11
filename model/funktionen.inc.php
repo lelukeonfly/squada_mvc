@@ -620,7 +620,18 @@ function getAuktionLog($auktion_id)
     $db_connection = get_db_connection();
     $query = "SELECT nimmt_teil.wann as date, nimmt_teil.geld as price, mannschaft.name as team FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion_id ORDER BY nimmt_teil.wann DESC";
     $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
-    return $statement->fetchAll();
+    //return $statement->fetchAll();
+    $return = $statement->fetchAll();
+    $newarray=array();
+    foreach ($return as $row){
+        $anotherarray=array();
+        $date = $row["date"];
+        $anotherarray['date']=date("Y-m-d H:i:s", strtotime("$date + 6 Hours"));
+        $anotherarray['price']=$row["price"];
+        $anotherarray['time']=$row["team"];
+        $newarray[]=$anotherarray;
+    }
+    return $newarray;
 }
 
 //ruft file zum generieren des auktionslogs auf

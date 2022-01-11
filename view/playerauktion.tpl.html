@@ -44,11 +44,11 @@
             //Wenn jetztzeit größer als zeit ist wenn spiler nicht mehr unter vertrag ist oder vor dem vertrag dann ist button clickbar
             if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))) {
                 ?>
-                <button type="submit" name="bieten" class="btn btn-primary mb-3">BIETEN</button>
+                <button type="submit" name="bieten" class="btn btn-primary mb-3">BET</button>
                 <?php
             }else{
             ?>
-            <button type="submit" name="bieten" class="btn btn-primary mb-3" DISABLED>BIETEN</button>
+            <button type="submit" name="bieten" class="btn btn-primary mb-3" DISABLED>BET</button>
             <?php
             }
             ?>
