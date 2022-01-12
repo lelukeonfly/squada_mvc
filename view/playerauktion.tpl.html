@@ -16,7 +16,7 @@
                                 alt="Team Image" width="25%"></li>
                         <li class="list-group-item">Team:
                             <?php
-                                if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
+                                if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))&&time()<strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))){
                                     $auktionenOfPlayer = getAuktionId($_GET['playerid']);
                                     if (!empty($auktionenOfPlayer)) {
                                     $latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
@@ -49,24 +49,31 @@
         <div class="col-auto">
             <label for="geld" class="visually-hidden">AMOUNT</label>
             <?php
-          if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
+          //if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
+          if(time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))){
             $auktionenOfPlayer = getAuktionId($_GET['playerid']);
             if (!empty($auktionenOfPlayer)) {
-            //$latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
-            ?>
-            <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction($latestAuktion)['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
-            <?php
+                if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))) {
+                    ?>
+                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
+                }else{
+                $latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
+                ?>
+                <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction($latestAuktion)['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
+                }
             }else {
-            ?>
-            <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
-            <?php
+                ?>
+                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
             }
             ?>
             <?php
             }else{
-            ?>
-            <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
-            <?php
+                ?>
+                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
             }
           ?>
         </div>
