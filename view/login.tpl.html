@@ -1,13 +1,13 @@
    <div class="login-form">
         <form action="index.php?aktion=login" method="post">
             <h2 class="text-center">Member LOGIN</h2>
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Loginname" name="loginname" style="margin-top: 3%;">
+            <div class="form-group my-3">
+                <input type="text" class="form-control" placeholder="Loginname" name="loginname">
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" placeholder="Passwort" name="pwd" id="login" required style="margin-top: 3%;">
+            <div class="form-group my-3">
+                <input type="password" class="form-control" placeholder="Passwort" name="pwd" id="login" required>
             </div>
-            <div class="form-group" style="margin-top: 3%;">
+            <div class="form-group my-3">
                 <button type="submit" class="btn btn-primary btn-block" id="login">Log in</button>
             </div>
             <?php if (isset($login) && $login == false) { ?>
