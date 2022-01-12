@@ -46,6 +46,8 @@
         case 'playerauktion':
             bieten();
             break;
+        case 'openauctions':
+            break;
     }
     
     /**
