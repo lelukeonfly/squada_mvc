@@ -1,20 +1,21 @@
 <div class="container">
-    <div class="card m-3" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="<?=getPlayerImage(get_player($_GET['playerid'])['name']);?>" class="img-fluid rounded-start"
-                    alt="..." style="margin: 5%">
+    <div class="card m-3">
+        <div class="d-flex">
+            <div class="flex-shrink-1">
+                <img src="<?=getPlayerImage(get_player($_GET['playerid'])['name']);?>" class="img-fluid rounded-start m-3" alt="...">
             </div>
-            <div class="col-md-8">
+            <div class="flex-grow-1">
                 <div class="card-body">
-                    <h5 class="card-title"><?=get_player($_GET['playerid'])['name'];?></h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Position: <?=get_player($_GET['playerid'])['position'];?>
-                        </li>
-                        <li class="list-group-item">Home team: <?=get_player($_GET['playerid'])['mannschaft'];?>
-                            <br /><img src="<?=getTeamImage(get_player($_GET['playerid'])['mannschaft']);?>"
-                                alt="Team Image" width="25%"></li>
-                        <li class="list-group-item">Team:
+                    <h5 class="card-title text-center"><?=get_player($_GET['playerid'])['name'];?></h5>
+                    <div class="d-flex flex-column m-3 align-content-center">
+                        <div class="my-sm-2">Position: <?=get_player($_GET['playerid'])['position'];?></div>
+                        <hr>
+                        <div class="d-flex flex-nowrap justify-content-between">
+                        <div class="flex-grow-1 align-self-center">Home team: <?=get_player($_GET['playerid'])['mannschaft'];?></div>
+                        <img src="<?=getTeamImage(get_player($_GET['playerid'])['mannschaft']);?>" class="flex-shrink-1 align-self-center img-fluid" alt="Team Image" style="max-width:5em;">
+                        </div>
+                        <hr>
+                        <div class="my-sm-2">Team: 
                             <?php
                                 if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))&&time()<strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))){
                                     $auktionenOfPlayer = getAuktionId($_GET['playerid']);
@@ -34,8 +35,8 @@
                                     ?>-<?php
                                 }
                             ?>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

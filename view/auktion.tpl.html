@@ -1,40 +1,54 @@
 <div>
-
+  <input id="searchbar" onkeyup="search_player()" type="text" name="search" placeholder="Search players..">
   <script>
+    function search_player() {
+    let input = document.getElementById('searchbar').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('player');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            //x[i].style.display="none";
+            x[i].parentElement.style.display="none";
+        }
+        else {
+            x[i].parentElement.style.display="table-row";
+        }
+    }
+}
+  </script>
+
+  <!-- <script>
     /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
 
-    /* function filterFunction() {
-      var input, filter, ul, li, a, i;
+      function filterFunction() {
+      let input, filter, div, td, i;
       input = document.getElementById("InputSearch");
       filter = input.value.toUpperCase();
-      div = document.getElementById("search");
-      a = div.getElementsByTagName("a");
-      for (i = 0; i < a.length; i++) {
-        txtValue = a[i].textContent || a[i].innerText;
+      div = document.getElementById("table");
+      td = div.getElementsByTagName("td");
+      for (i = 0; i < td.length; i++) {
+        txtValue = td[i].textContent || td[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          a[i].style.display = "";
+          td[i].style.display = "";
         } else {
-          a[i].style.display = "none";
+          td[i].style.display = "";
         }
       }
-    } */
-  </script>
+    } 
+  </script> -->
 
-  <!-- <div class="dropdown" id="search">
+  <!-- <div id="search">
     <input type="text" class="form-control" id="InputSearch" placeholder="Search.." onkeyup="filterFunction()">
-    <div class="dropdown-content">
-      <?php foreach (get_players() as $player) { ?>
-        <a class="dropdown-item" href="index.php?aktion=playerauktion&playerid=<?= $player['id']; ?>">
-          <?= $player['name']; ?>
-        </a>
-      <?php } ?>
-    </div>
+      <?php
+      #require_once 'model/table_auktion.php';
+      ?>
   </div> -->
 
 
   <?php
-  require_once "model/table_auktion.php";
+    require_once "model/table_auktion.php";
   ?>
 </div>

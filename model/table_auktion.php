@@ -33,14 +33,15 @@
                     ?>
                     <tr class="clickable" onclick="window.location='index.php?aktion=playerauktion&playerid=<?= $player['id']; ?>'">
                         <?php
-                            foreach ($player as $key => $detail) {
-                                if ($key == "id") {
-                                } else {
+                            #foreach ($player as $key => $detail) {
+                            #    if ($key == "id") {
+                            #    } else {
                         ?>
-                                <td><?= $detail; ?></td>
+                            <td class="player"><?=$player['name'];?></td>
+                            <td><?=$player['position'];?></td>
                         <?php
-                                }
-                            }
+                            #    }
+                            #}
                         ?>
                     </tr>
                 <?php
