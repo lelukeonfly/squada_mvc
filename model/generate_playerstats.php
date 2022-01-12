@@ -6,7 +6,7 @@
         if (!empty($latestAuktion)) {
         $auktionDetails = getAuktionDetails($latestAuktion['id']);
         $anfang = $auktionDetails['anfang'];
-        $anfang = date("Y-m-d H:i:s", strtotime("$anfang + 6 Hours"));
+        $anfang = date("Y-m-d H:i:s", strtotime("$anfangs"));
         $dauer = $auktionDetails['dauer'];
         $vertragszeit = $auktionDetails['vertragszeit'];
         $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
@@ -80,6 +80,7 @@ var countDownDate = new Date("<?=$bis;?>").getTime();
 var x = setInterval(function() {
 
   // Get today's date and time
+  //change this!!!!!!!!!!!!!!!!!!!!!!!!!root
   var now = new Date().getTime();
     
   // Find the distance between now and the count down date

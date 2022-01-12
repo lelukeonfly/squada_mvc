@@ -3,7 +3,7 @@ function get_db_connection()
 {
     $host = "localhost";
     $user = "root";
-    $pwd = "";
+    $pwd = "root";
     $schema = "squada";
 
     try {
