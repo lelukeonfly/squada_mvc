@@ -3,7 +3,7 @@ function get_db_connection()
 {
     $host = "localhost";
     $user = "root";
-    $pwd = "root";
+    $pwd = "";
     $schema = "squada";
 
     try {
@@ -626,7 +626,7 @@ function getAuktionLog($auktion_id)
     foreach ($return as $row){
         $anotherarray=array();
         $date = $row["date"];
-        $anotherarray['date']=date("Y-m-d H:i:s", strtotime("$date + 6 Hours"));
+        $anotherarray['date']=date("Y-m-d H:i:s", strtotime("$date"));
         $anotherarray['price']=$row["price"];
         $anotherarray['time']=$row["team"];
         $newarray[]=$anotherarray;
@@ -695,4 +695,12 @@ function secondsToTime($seconds) {
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$seconds");
     return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes and %s seconds');
+}
+
+function getTeamWithAuktionIdAndBet($auktion,$money)
+{
+    $db_connection = get_db_connection();
+    $query = "SELECT mannschaft.name FROM auktion JOIN nimmt_teil ON auktion.id = nimmt_teil.auktion_fk JOIN mannschaft ON nimmt_teil.mannschaft_fk = mannschaft.id WHERE auktion.id = $auktion AND nimmt_teil.geld = $money";
+    $statement = $db_connection->query($query, PDO::FETCH_ASSOC);
+    return $statement->fetch();
 }

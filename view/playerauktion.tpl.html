@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="card mb-3" style="max-width: 540px;">
+    <div class="card m-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src="<?=getPlayerImage(get_player($_GET['playerid'])['name']);?>"
@@ -17,7 +17,21 @@
                         <li class="list-group-item">Team:
                             <?php
                                 if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
-                                    ?><?=get_player($_GET['playerid'])['originalmannschaft'];?>
+                                    //var_dump(getLatestAuktionId($_GET['playerid'])['id']);
+                                    //var_dump(getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']);
+                                    $auktionenOfPlayer = getAuktionId($_GET['playerid']);
+                                    //var_dump($auktionenOfPlayer);
+                                    if (!empty($auktionenOfPlayer)) {
+                                    $latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
+                                        ?>
+                                        <?=getTeamWithAuktionIdAndBet($latestAuktion,getHoechstesGebotOnAuction($latestAuktion)['max'])['name'];?>
+                                        <?php
+                                    }else {
+                                        ?>
+                                        -
+                                        <?php
+                                    }
+                                    ?>
                                     <?php
                                 }else{
                                     ?>-<?php
@@ -33,11 +47,21 @@
     <?php
     if(is_logged_in()&&$_SESSION['admin']==false){
     ?>
-    <form class="row g-3" action="" method="POST">
+    <form class="row g-3 m-2" action="" method="POST">
         <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
         <div class="col-auto">
           <label for="geld" class="visually-hidden">AMOUNT</label>
-          <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+          <?php
+            if (getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']) {
+                ?>
+                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
+            }else{
+                ?>
+                <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
+                <?php
+            }
+          ?>
         </div>
         <div class="col-auto">
             <?php

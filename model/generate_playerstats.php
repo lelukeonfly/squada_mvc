@@ -6,7 +6,7 @@
         if (!empty($latestAuktion)) {
         $auktionDetails = getAuktionDetails($latestAuktion['id']);
         $anfang = $auktionDetails['anfang'];
-        $anfang = date("Y-m-d H:i:s", strtotime("$anfangs"));
+        $anfang = date("Y-m-d H:i:s", strtotime("$anfang"));
         $dauer = $auktionDetails['dauer'];
         $vertragszeit = $auktionDetails['vertragszeit'];
         $bis = date('Y-m-d H:i:s', strtotime("$anfang + $dauer Seconds"));
@@ -48,7 +48,7 @@
             </tr>
             <tr>
                 <td>
-                    Contracct time
+                    Contract time
                 </td>
                 <td>
                     <?=$vertragsdauerindays;?>
