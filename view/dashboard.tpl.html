@@ -17,7 +17,7 @@
             <h1 class="display-6">Your offered players</h1>
             <div class="row justify-content-center">
                 <?php foreach ($players as $value) { ?>
-                    <div class="card" style="width: 18rem;">
+                    <div class="card m-3" style="width: 18rem;">
                         <img class="card-img-top" src="<?= getPlayerImage($value['name']) ?>" alt="Playerimage of <?= $value['name'] ?>">
                         <div class="card-body">
                             <h5 class="card-title"><?= $value['name'] ?></h5>

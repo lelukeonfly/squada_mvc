@@ -2,8 +2,8 @@
     <div class="card m-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="<?=getPlayerImage(get_player($_GET['playerid'])['name']);?>"
-                    class="img-fluid rounded-start" alt="..." style="margin: 5%">
+                <img src="<?=getPlayerImage(get_player($_GET['playerid'])['name']);?>" class="img-fluid rounded-start"
+                    alt="..." style="margin: 5%">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -17,22 +17,19 @@
                         <li class="list-group-item">Team:
                             <?php
                                 if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
-                                    //var_dump(getLatestAuktionId($_GET['playerid'])['id']);
-                                    //var_dump(getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']);
                                     $auktionenOfPlayer = getAuktionId($_GET['playerid']);
-                                    //var_dump($auktionenOfPlayer);
                                     if (!empty($auktionenOfPlayer)) {
                                     $latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
                                         ?>
-                                        <?=getTeamWithAuktionIdAndBet($latestAuktion,getHoechstesGebotOnAuction($latestAuktion)['max'])['name'];?>
-                                        <?php
+                            <?=getTeamWithAuktionIdAndBet($latestAuktion,getHoechstesGebotOnAuction($latestAuktion)['max'])['name'];?>
+                            <?php
                                     }else {
                                         ?>
-                                        -
-                                        <?php
+                            -
+                            <?php
                                     }
                                     ?>
-                                    <?php
+                            <?php
                                 }else{
                                     ?>-<?php
                                 }
@@ -50,16 +47,26 @@
     <form class="row g-3 m-2" action="" method="POST">
         <input type="hidden" name="player" value="<?=$_GET['playerid'];?>">
         <div class="col-auto">
-          <label for="geld" class="visually-hidden">AMOUNT</label>
-          <?php
-            if (getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']) {
-                ?>
-                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
-                <?php
+            <label for="geld" class="visually-hidden">AMOUNT</label>
+            <?php
+          if(time()>strtotime(getTimestampVorVertrag($_GET['playerid']))){
+            $auktionenOfPlayer = getAuktionId($_GET['playerid']);
+            if (!empty($auktionenOfPlayer)) {
+            //$latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
+            ?>
+            <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction($latestAuktion)['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
+            <?php
+            }else {
+            ?>
+            <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+            <?php
+            }
+            ?>
+            <?php
             }else{
-                ?>
-                <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction(getLatestAuktionId($_GET['playerid'])['id'])['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
-                <?php
+            ?>
+            <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+            <?php
             }
           ?>
         </div>
@@ -68,8 +75,8 @@
             //Wenn jetztzeit größer als zeit ist wenn spiler nicht mehr unter vertrag ist oder vor dem vertrag dann ist button clickbar
             if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))||time()<strtotime(getTimestampVorVertrag($_GET['playerid']))) {
                 ?>
-                <button type="submit" name="bieten" class="btn btn-primary mb-3">BET</button>
-                <?php
+            <button type="submit" name="bieten" class="btn btn-primary mb-3">BET</button>
+            <?php
             }else{
             ?>
             <button type="submit" name="bieten" class="btn btn-primary mb-3" DISABLED>BET</button>
@@ -83,9 +90,9 @@
     ?>
 
     <div>
-       <?php
+        <?php
             require_once "model/generate_playerstats.php";
-       ?> 
+       ?>
     </div>
 
 
