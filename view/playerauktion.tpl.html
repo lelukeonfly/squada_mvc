@@ -56,24 +56,24 @@
             if (!empty($auktionenOfPlayer)) {
                 if (time()>strtotime(getTimestampWhenSpielerNichtMehrUnterVertragIst($_GET['playerid']))) {
                     ?>
-                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <input type="number" name="geld" min="1" max="<?=$user['guthaben'];?>" step="1" class="form-control" placeholder="AMOUNT" required>
                 <?php
                 }else{
                 $latestAuktion = getLatestAuktionId($_GET['playerid'])['id'];
                 ?>
-                <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction($latestAuktion)['max']+1;?>" step="1" class="form-control" placeholder="AMOUNT" required>
+                <input type="number" name="geld" min="<?=getHoechstesGebotOnAuction($latestAuktion)['max']+1;?>" max="<?=$user['guthaben'];?>" step="1" class="form-control" placeholder="AMOUNT" required>
                 <?php
                 }
             }else {
                 ?>
-                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <input type="number" name="geld" min="1" max="<?=$user['guthaben'];?>" step="1" class="form-control" placeholder="AMOUNT" required>
                 <?php
             }
             ?>
             <?php
             }else{
                 ?>
-                <input type="number" name="geld" min="1" step="1" class="form-control" placeholder="AMOUNT" required>
+                <input type="number" name="geld" min="1" max="<?=$user['guthaben'];?>" step="1" class="form-control" placeholder="AMOUNT" required>
                 <?php
             }
           ?>
