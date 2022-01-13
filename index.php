@@ -44,9 +44,8 @@
         case 'auktion':
             break;
         case 'playerauktion':
+            $user = getUser($_SESSION['user'], $_SESSION['admin']);
             bieten();
-            break;
-        case 'openauctions':
             break;
     }
     
